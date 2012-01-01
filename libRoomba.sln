@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libRoomba", "libRoomba\libRoomba.vcproj", "{50AA1F6E-07EF-4D45-921E-4A2FD85E7033}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleDemo", "ConsoleDemo\ConsoleDemo.vcproj", "{921D0CDE-71ED-4B25-B655-DECAB6BBF8BE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{50AA1F6E-07EF-4D45-921E-4A2FD85E7033} = {50AA1F6E-07EF-4D45-921E-4A2FD85E7033}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{50AA1F6E-07EF-4D45-921E-4A2FD85E7033}.Debug|Win32.ActiveCfg = Debug|Win32
+		{50AA1F6E-07EF-4D45-921E-4A2FD85E7033}.Debug|Win32.Build.0 = Debug|Win32
+		{50AA1F6E-07EF-4D45-921E-4A2FD85E7033}.Release|Win32.ActiveCfg = Release|Win32
+		{50AA1F6E-07EF-4D45-921E-4A2FD85E7033}.Release|Win32.Build.0 = Release|Win32
+		{921D0CDE-71ED-4B25-B655-DECAB6BBF8BE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{921D0CDE-71ED-4B25-B655-DECAB6BBF8BE}.Debug|Win32.Build.0 = Debug|Win32
+		{921D0CDE-71ED-4B25-B655-DECAB6BBF8BE}.Release|Win32.ActiveCfg = Release|Win32
+		{921D0CDE-71ED-4B25-B655-DECAB6BBF8BE}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
