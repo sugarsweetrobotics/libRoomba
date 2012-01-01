@@ -148,15 +148,3 @@ void Roomba::RequestSensor(unsigned char sensorId, char *value)
 	m_pTransport->ReceiveData((unsigned char*)data, 1, &readBytes);
 	memcpy(value, data, 1);
 }
-
-int Roomba::GetTemperature() {
-	char buf;
-	RequestSensor(TEMPERATURE, &buf);
-	return buf;
-}
-
-int Roomba::GetVoltage() {
-	unsigned short buf;
-	RequestSensor(VOLTAGE, &buf);
-	return buf;
-}
