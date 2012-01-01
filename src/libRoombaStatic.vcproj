@@ -82,8 +82,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(ProjectName)\$(ConfigurationName)"
-			IntermediateDirectory="$(ProjectName)\$(ConfigurationName)"
+			OutputDirectory="$(ProjectName)\$(ConfigurationName)\"
+			IntermediateDirectory="$(ProjectName)\$(ConfigurationName)\"
 			ConfigurationType="4"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -141,7 +141,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(OutDir)libRoomba.lib&quot; &quot;$(SolutionDir)lib&quot;&#x0D;&#x0A;"
+				CommandLine="copy &quot;$(OutDir)libRoombaStatic.lib&quot; &quot;$(SolutionDir)lib&quot;&#x0D;&#x0A;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>

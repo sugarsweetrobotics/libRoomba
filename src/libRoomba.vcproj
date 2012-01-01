@@ -18,8 +18,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(ConfigurationName)\"
-			IntermediateDirectory="$(ConfigurationName)\"
+			OutputDirectory="$(ProjectName)\$(ConfigurationName)\"
+			IntermediateDirectory="$(ProjectName)\$(ConfigurationName)\"
 			ConfigurationType="2"
 			CharacterSet="1"
 			>
@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(SolutionDir)include; SerialPort\include"
+				AdditionalIncludeDirectories="$(SolutionDir)include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;LIBROOMBA_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -94,8 +94,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="$(ProjectName)\$(ConfigurationName)\"
+			IntermediateDirectory="$(ProjectName)\$(ConfigurationName)\"
 			ConfigurationType="2"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -178,11 +178,19 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\libroomba.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Roomba.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\SerialPort.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Thread.cpp"
 				>
 			</File>
 			<File
@@ -196,7 +204,27 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath="..\include\ComAccessException.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\ComException.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\common.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\ComOpenException.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\ComStateException.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\libroomba.h"
 				>
 			</File>
 			<File
@@ -208,7 +236,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\RoombaException.h"
+				RelativePath="..\include\RoombaException.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\SerialPort.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\Thread.h"
 				>
 			</File>
 			<File

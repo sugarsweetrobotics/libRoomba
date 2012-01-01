@@ -1,12 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libRoomba", "libRoomba\libRoomba.vcproj", "{50AA1F6E-07EF-4D45-921E-4A2FD85E7033}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libRoomba", "src\libRoomba.vcproj", "{50AA1F6E-07EF-4D45-921E-4A2FD85E7033}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleDemo", "ConsoleDemo\ConsoleDemo.vcproj", "{921D0CDE-71ED-4B25-B655-DECAB6BBF8BE}"
 	ProjectSection(ProjectDependencies) = postProject
 		{50AA1F6E-07EF-4D45-921E-4A2FD85E7033} = {50AA1F6E-07EF-4D45-921E-4A2FD85E7033}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libRoombaStatic", "src\libRoombaStatic.vcproj", "{2D33F13B-CC3E-4DDB-9CF1-E8C93FDB5B1B}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "libRoombaSetup", "libRoombaSetup\libRoombaSetup.vdproj", "{8B31D864-2D24-4DCD-9CA1-5D953DA007C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,6 +26,12 @@ Global
 		{921D0CDE-71ED-4B25-B655-DECAB6BBF8BE}.Debug|Win32.Build.0 = Debug|Win32
 		{921D0CDE-71ED-4B25-B655-DECAB6BBF8BE}.Release|Win32.ActiveCfg = Release|Win32
 		{921D0CDE-71ED-4B25-B655-DECAB6BBF8BE}.Release|Win32.Build.0 = Release|Win32
+		{2D33F13B-CC3E-4DDB-9CF1-E8C93FDB5B1B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2D33F13B-CC3E-4DDB-9CF1-E8C93FDB5B1B}.Debug|Win32.Build.0 = Debug|Win32
+		{2D33F13B-CC3E-4DDB-9CF1-E8C93FDB5B1B}.Release|Win32.ActiveCfg = Release|Win32
+		{2D33F13B-CC3E-4DDB-9CF1-E8C93FDB5B1B}.Release|Win32.Build.0 = Release|Win32
+		{8B31D864-2D24-4DCD-9CA1-5D953DA007C4}.Debug|Win32.ActiveCfg = Debug
+		{8B31D864-2D24-4DCD-9CA1-5D953DA007C4}.Release|Win32.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

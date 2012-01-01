@@ -17,8 +17,6 @@ namespace net {
 
 				~Transport(void);
 
-
-
 				int SendPacket(unsigned char opCode, const unsigned char *dataBytes = NULL, const unsigned int dataSize = 0);
 
 				int ReceiveData(unsigned char *buffer, unsigned int maxBufferSize, unsigned int* readByte);

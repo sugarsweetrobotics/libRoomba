@@ -1,7 +1,9 @@
 #ifndef OP_CODE_HEADER_INCLUDED
 #define OP_CODE_HEADER_INCLUDED
 
-
+/**
+ * These values are not used by users.
+ */
 
 enum OP_CODE{
 	OP_START = 128,
@@ -23,7 +25,15 @@ enum OP_CODE{
 
 	OP_DRIVE_DIRECT = 145,
 	OP_DRIVE_PWM,
+
+	OP_STREAM = 148,
+	OP_QUERY_LIST,
+	OP_PAUSE_RESUME_STREAM,
+
 };
+
+
+
 
 
 enum Baud {

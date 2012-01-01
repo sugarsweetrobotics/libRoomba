@@ -8,6 +8,7 @@ Transport::Transport(const char* portName, const int baudrate)
 	m_pSerialPort = new SerialPort(portName, baudrate);
 }
 
+
 Transport::~Transport(void)
 {
 	delete m_pSerialPort;
@@ -31,6 +32,10 @@ int Transport::SendPacket(unsigned char opCode,
 int Transport::ReceiveData(unsigned char *buffer, unsigned int requestSize, unsigned int* readBytes)
 {
 	unsigned char* data = new unsigned char[requestSize];
+	while (m_pSerialPort->GetSizeInRxBuffer() <= requestSize) {
+
+	}
+
 	*readBytes = m_pSerialPort->Read(buffer, requestSize);
 	return 0;
 }
