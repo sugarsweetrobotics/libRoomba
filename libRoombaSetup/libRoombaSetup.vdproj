@@ -15,7 +15,49 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_0B605FCC53A14CFB99E2CFE8E6BAF9C0"
+        "OwnerKey" = "8:_476C4392E722433DACCD16F57C10A63D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_0B605FCC53A14CFB99E2CFE8E6BAF9C0"
+        "OwnerKey" = "8:_D24C91B5F7F74C63BB7EC701A306DE75"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_0B605FCC53A14CFB99E2CFE8E6BAF9C0"
+        "OwnerKey" = "8:_8D7DF329F7C9447F8AE47C17E2D47A28"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_22B4E588F73A4DC1BE738E0F0D5D00DD"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3248058D348542D9A8E5CDF8D57CA106"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_358793B8A3BE4DD3A25DB58D76849122"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_37D13AF57F3644BB943C12509564CE64"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_44C8AA7269ED4F218443098B5F2C0C7B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -27,14 +69,20 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_58B5E513A1DF4E8B9ACF02E0A57ECBC8"
+        "MsmKey" = "8:_4B6294B35D1748D28F7F71AA98188194"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_58FBB87FF1054B65816DEEE821C18A8C"
-        "OwnerKey" = "8:_7B7710582CF348EB9223B69F2A92C133"
+        "MsmKey" = "8:_4B64AD9804C14405A60220CD481D0B71"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_58B5E513A1DF4E8B9ACF02E0A57ECBC8"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -45,7 +93,19 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_62A388421C87461A95C37DFE7027F4A7"
+        "OwnerKey" = "8:_0B605FCC53A14CFB99E2CFE8E6BAF9C0"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_6A3C7F8B42BF4BDC80CC043E004156E2"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_778CDE3FFEC5473F8CE9AD123F10C0FB"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -57,14 +117,20 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_7CAFA788A1B74AB181031246FC552555"
-        "OwnerKey" = "8:_476C4392E722433DACCD16F57C10A63D"
+        "MsmKey" = "8:_821DE583CA5C48CDACD5E7DC740098F7"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_7CAFA788A1B74AB181031246FC552555"
-        "OwnerKey" = "8:_8D7DF329F7C9447F8AE47C17E2D47A28"
+        "MsmKey" = "8:_8451E6B08F304E2A9500AF52712AC685"
+        "OwnerKey" = "8:_9F380AC95A9049768426CAD91FDB60AB"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8701E1E7D690445BBE5123D220EF2891"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -75,14 +141,44 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_97CDF3358662480B8B6EC51C6869C300"
-        "OwnerKey" = "8:_7CAFA788A1B74AB181031246FC552555"
+        "MsmKey" = "8:_8DB4B3B57463424FBFB79020B75AFD3C"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_FEB1166024104116A3A94444F7AF08EB"
-        "OwnerKey" = "8:_58FBB87FF1054B65816DEEE821C18A8C"
+        "MsmKey" = "8:_940E6DC88BA540BF921100C1DACA80D2"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9F380AC95A9049768426CAD91FDB60AB"
+        "OwnerKey" = "8:_7B7710582CF348EB9223B69F2A92C133"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9F380AC95A9049768426CAD91FDB60AB"
+        "OwnerKey" = "8:_821DE583CA5C48CDACD5E7DC740098F7"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C518D3C62CFE4639BA72F47C2AB8F7FC"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D24C91B5F7F74C63BB7EC701A306DE75"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_EF4207DA90CB459DA19A9933AB7AE84B"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -103,6 +199,27 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Net.Framework.3.5"
+                    {
+                    "Name" = "8:.NET Framework 3.5"
+                    "ProductCode" = "8:Microsoft.Net.Framework.3.5"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
+            }
         }
         "Release"
         {
@@ -119,6 +236,27 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Net.Framework.3.5"
+                    {
+                    "Name" = "8:.NET Framework 3.5"
+                    "ProductCode" = "8:Microsoft.Net.Framework.3.5"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
+            }
         }
     }
     "Deployable"
@@ -140,6 +278,46 @@
         }
         "File"
         {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_22B4E588F73A4DC1BE738E0F0D5D00DD"
+            {
+            "SourcePath" = "8:..\\include\\ComOpenException.h"
+            "TargetName" = "8:ComOpenException.h"
+            "Tag" = "8:"
+            "Folder" = "8:_E1B3697A65ED4F058350D997AD49E8A7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3248058D348542D9A8E5CDF8D57CA106"
+            {
+            "SourcePath" = "8:..\\include\\op_code.h"
+            "TargetName" = "8:op_code.h"
+            "Tag" = "8:"
+            "Folder" = "8:_E1B3697A65ED4F058350D997AD49E8A7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_358793B8A3BE4DD3A25DB58D76849122"
             {
             "SourcePath" = "8:..\\lib\\libRoombaD.lib"
@@ -160,12 +338,212 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_37D13AF57F3644BB943C12509564CE64"
+            {
+            "SourcePath" = "8:..\\include\\Thread.h"
+            "TargetName" = "8:Thread.h"
+            "Tag" = "8:"
+            "Folder" = "8:_E1B3697A65ED4F058350D997AD49E8A7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_44C8AA7269ED4F218443098B5F2C0C7B"
+            {
+            "SourcePath" = "8:..\\include\\ComException.h"
+            "TargetName" = "8:ComException.h"
+            "Tag" = "8:"
+            "Folder" = "8:_E1B3697A65ED4F058350D997AD49E8A7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4B6294B35D1748D28F7F71AA98188194"
+            {
+            "SourcePath" = "8:..\\include\\ComAccessException.h"
+            "TargetName" = "8:ComAccessException.h"
+            "Tag" = "8:"
+            "Folder" = "8:_E1B3697A65ED4F058350D997AD49E8A7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4B64AD9804C14405A60220CD481D0B71"
+            {
+            "SourcePath" = "8:..\\include\\RoombaException.h"
+            "TargetName" = "8:RoombaException.h"
+            "Tag" = "8:"
+            "Folder" = "8:_E1B3697A65ED4F058350D997AD49E8A7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_58B5E513A1DF4E8B9ACF02E0A57ECBC8"
             {
             "SourcePath" = "8:..\\lib\\libRoomba.lib"
             "TargetName" = "8:libRoomba.lib"
             "Tag" = "8:"
             "Folder" = "8:_297982E7969A41FCAB5F1EDC1CBEE55D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_778CDE3FFEC5473F8CE9AD123F10C0FB"
+            {
+            "SourcePath" = "8:..\\include\\common.h"
+            "TargetName" = "8:common.h"
+            "Tag" = "8:"
+            "Folder" = "8:_E1B3697A65ED4F058350D997AD49E8A7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8701E1E7D690445BBE5123D220EF2891"
+            {
+            "SourcePath" = "8:..\\include\\SerialPort.h"
+            "TargetName" = "8:SerialPort.h"
+            "Tag" = "8:"
+            "Folder" = "8:_E1B3697A65ED4F058350D997AD49E8A7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8DB4B3B57463424FBFB79020B75AFD3C"
+            {
+            "SourcePath" = "8:..\\include\\Roomba.h"
+            "TargetName" = "8:Roomba.h"
+            "Tag" = "8:"
+            "Folder" = "8:_E1B3697A65ED4F058350D997AD49E8A7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_940E6DC88BA540BF921100C1DACA80D2"
+            {
+            "SourcePath" = "8:..\\include\\ComStateException.h"
+            "TargetName" = "8:ComStateException.h"
+            "Tag" = "8:"
+            "Folder" = "8:_E1B3697A65ED4F058350D997AD49E8A7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C518D3C62CFE4639BA72F47C2AB8F7FC"
+            {
+            "SourcePath" = "8:..\\include\\libroomba.h"
+            "TargetName" = "8:libroomba.h"
+            "Tag" = "8:"
+            "Folder" = "8:_E1B3697A65ED4F058350D997AD49E8A7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EF4207DA90CB459DA19A9933AB7AE84B"
+            {
+            "SourcePath" = "8:..\\include\\Transport.h"
+            "TargetName" = "8:Transport.h"
+            "Tag" = "8:"
+            "Folder" = "8:_E1B3697A65ED4F058350D997AD49E8A7"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -217,6 +595,17 @@
                             }
                         }
                     }
+                }
+            }
+            "{1525181F-901A-416C-8A58-119130FE478E}:_A033C6FB6476460280BFD03221AC977F"
+            {
+            "Name" = "8:#1914"
+            "AlwaysCreate" = "11:FALSE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Property" = "8:SystemFolder"
+                "Folders"
+                {
                 }
             }
             "{1525181F-901A-416C-8A58-119130FE478E}:_C2DF70245E604E03A426032B58A7310C"
@@ -379,34 +768,6 @@
             {
                 "Keys"
                 {
-                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_0EAF63E95EF1417FA55ADA3CEC03C9C7"
-                    {
-                    "Name" = "8:Software"
-                    "Condition" = "8:"
-                    "AlwaysCreate" = "11:FALSE"
-                    "DeleteAtUninstall" = "11:FALSE"
-                    "Transitive" = "11:FALSE"
-                        "Keys"
-                        {
-                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_69BA82EFB546468DB89ABAF299A6BB55"
-                            {
-                            "Name" = "8:[Manufacturer]"
-                            "Condition" = "8:"
-                            "AlwaysCreate" = "11:FALSE"
-                            "DeleteAtUninstall" = "11:FALSE"
-                            "Transitive" = "11:FALSE"
-                                "Keys"
-                                {
-                                }
-                                "Values"
-                                {
-                                }
-                            }
-                        }
-                        "Values"
-                        {
-                        }
-                    }
                     "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_2DB99A8776E447789C35BD4D2301EFB6"
                     {
                     "Name" = "8:Environment"
@@ -416,6 +777,34 @@
                     "Transitive" = "11:FALSE"
                         "Keys"
                         {
+                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_A6BF45B6209B4277A81DC5C90B24B757"
+                            {
+                            "Name" = "8:Software"
+                            "Condition" = "8:"
+                            "AlwaysCreate" = "11:FALSE"
+                            "DeleteAtUninstall" = "11:FALSE"
+                            "Transitive" = "11:FALSE"
+                                "Keys"
+                                {
+                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_69BA82EFB546468DB89ABAF299A6BB55"
+                                    {
+                                    "Name" = "8:[Manufacturer]"
+                                    "Condition" = "8:"
+                                    "AlwaysCreate" = "11:FALSE"
+                                    "DeleteAtUninstall" = "11:FALSE"
+                                    "Transitive" = "11:FALSE"
+                                        "Keys"
+                                        {
+                                        }
+                                        "Values"
+                                        {
+                                        }
+                                    }
+                                }
+                                "Values"
+                                {
+                                }
+                            }
                         }
                         "Values"
                         {
@@ -865,21 +1254,7 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_58FBB87FF1054B65816DEEE821C18A8C"
-            {
-            "UseDynamicProperties" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "SourcePath" = "8:policy_9_0_Microsoft_VC90_DebugCRT_x86.msm"
-                "Properties"
-                {
-                }
-            "LanguageId" = "3:0"
-            "Exclude" = "11:FALSE"
-            "Folder" = "8:"
-            "Feature" = "8:"
-            "IsolateTo" = "8:"
-            }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_7CAFA788A1B74AB181031246FC552555"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_0B605FCC53A14CFB99E2CFE8E6BAF9C0"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
@@ -893,7 +1268,7 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_97CDF3358662480B8B6EC51C6869C300"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_62A388421C87461A95C37DFE7027F4A7"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
@@ -907,11 +1282,25 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_FEB1166024104116A3A94444F7AF08EB"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_8451E6B08F304E2A9500AF52712AC685"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "SourcePath" = "8:microsoft_vc90_debugcrt_x86.msm"
+                "Properties"
+                {
+                }
+            "LanguageId" = "3:0"
+            "Exclude" = "11:FALSE"
+            "Folder" = "8:"
+            "Feature" = "8:"
+            "IsolateTo" = "8:"
+            }
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_9F380AC95A9049768426CAD91FDB60AB"
+            {
+            "UseDynamicProperties" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "SourcePath" = "8:policy_9_0_Microsoft_VC90_DebugCRT_x86.msm"
                 "Properties"
                 {
                 }
@@ -1036,12 +1425,68 @@
                 {
                 }
             }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_821DE583CA5C48CDACD5E7DC740098F7"
+            {
+            "SourcePath" = "8:..\\src\\libRoomba\\Debug\\libRoombaD.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_A033C6FB6476460280BFD03221AC977F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:Debug|Win32"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{50AA1F6E-07EF-4D45-921E-4A2FD85E7033}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_8D7DF329F7C9447F8AE47C17E2D47A28"
             {
             "SourcePath" = "8:..\\src\\libRoomba\\Release\\libRoomba.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_9CF79836A4174E6180A92538395E5D6A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:Release|Win32"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{50AA1F6E-07EF-4D45-921E-4A2FD85E7033}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_D24C91B5F7F74C63BB7EC701A306DE75"
+            {
+            "SourcePath" = "8:..\\src\\libRoomba\\Release\\libRoomba.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_A033C6FB6476460280BFD03221AC977F"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"

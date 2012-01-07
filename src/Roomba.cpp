@@ -14,22 +14,22 @@ m_isStreamMode(0)
 	m_pTransport->SendPacket(OP_START);
 	m_CurrentMode = MODE_PASSIVE;
 
-	SetMode(MODE_SAFE);
+	setMode(MODE_SAFE);
 }
 
 
 Roomba::~Roomba(void)
 {
-	SetMode(POWER_DOWN);
+	setMode(POWER_DOWN);
 	if(m_isStreamMode) {
-		SuspendSensorStream();
+		suspendSensorStream();
 		m_isStreamMode = false;
 		Join();
 	}
 	delete m_pTransport;
 }
 
-void Roomba::SetMode(Mode mode)
+void Roomba::setMode(Mode mode)
 {
 	switch(mode) {
 	case MODE_SAFE:
@@ -73,8 +73,8 @@ void Roomba::SetMode(Mode mode)
 	}
 }
 
-void Roomba::Drive(unsigned short translation, unsigned short turnRadius) {
-	if(GetMode() != MODE_SAFE && GetMode() != MODE_FULL) {
+void Roomba::drive(unsigned short translation, unsigned short turnRadius) {
+	if(getMode() != MODE_SAFE && getMode() != MODE_FULL) {
 		throw PreconditionNotMetError();
 	}
 
@@ -95,8 +95,8 @@ void Roomba::Drive(unsigned short translation, unsigned short turnRadius) {
 	m_pTransport->SendPacket(OP_DRIVE, data, 4);
 }
 
-void Roomba::DriveDirect(unsigned short rightWheel, unsigned short leftWheel) {
-	if(GetMode() != MODE_SAFE && GetMode() !=MODE_FULL) {
+void Roomba::driveDirect(unsigned short rightWheel, unsigned short leftWheel) {
+	if(getMode() != MODE_SAFE && getMode() !=MODE_FULL) {
 		throw PreconditionNotMetError();
 	}
 
@@ -116,8 +116,8 @@ void Roomba::DriveDirect(unsigned short rightWheel, unsigned short leftWheel) {
 	m_pTransport->SendPacket(OP_DRIVE, data, 4);
 }
 
-void Roomba::DrivePWM(unsigned short rightWheel, unsigned short leftWheel) {
-	if(GetMode() != MODE_SAFE && GetMode() != MODE_FULL) {
+void Roomba::drivePWM(unsigned short rightWheel, unsigned short leftWheel) {
+	if(getMode() != MODE_SAFE && getMode() != MODE_FULL) {
 		throw PreconditionNotMetError();
 	}
 
@@ -137,9 +137,9 @@ void Roomba::DrivePWM(unsigned short rightWheel, unsigned short leftWheel) {
 	m_pTransport->SendPacket(OP_DRIVE_PWM, data, 4);
 }
 
-LIBROOMBA_API void Roomba::DriveMotors(Motors mainBrush, Motors sideBrush, Motors vacuum)
+LIBROOMBA_API void Roomba::driveMotors(Motors mainBrush, Motors sideBrush, Motors vacuum)
 {
-	if(GetMode() != MODE_SAFE && GetMode() !=MODE_FULL) {
+	if(getMode() != MODE_SAFE && getMode() !=MODE_FULL) {
 		throw PreconditionNotMetError();
 	}
 
@@ -176,7 +176,7 @@ LIBROOMBA_API void Roomba::DriveMotors(Motors mainBrush, Motors sideBrush, Motor
 
 
 
-void Roomba::SetLED(unsigned char leds, unsigned char intensity, unsigned char color /* = 127*/) 
+void Roomba::setLED(unsigned char leds, unsigned char intensity, unsigned char color /* = 127*/) 
 {
 	unsigned char buf[3] = {leds, color, intensity};
 	m_pTransport->SendPacket(OP_LEDS, buf, 3);
@@ -184,7 +184,7 @@ void Roomba::SetLED(unsigned char leds, unsigned char intensity, unsigned char c
 
 
 				
-void Roomba::StartSensorStream(unsigned char* requestingSensors, int numSensors)
+void Roomba::startSensorStream(unsigned char* requestingSensors, int numSensors)
 {
 	m_SensorDataMap.clear();
 	unsigned char* buffer = new unsigned char[numSensors + 1];
@@ -196,18 +196,18 @@ void Roomba::StartSensorStream(unsigned char* requestingSensors, int numSensors)
 	m_pTransport->SendPacket(OP_STREAM, buffer, numSensors+1);
 	
 	m_isStreamMode = true;
-	ResumeSensorStream();
+	resumeSensorStream();
 	Start();
 	delete buffer;
 }
 
-void Roomba::ResumeSensorStream()
+void Roomba::resumeSensorStream()
 {
 	unsigned char buf = 1;
 	m_pTransport->SendPacket(OP_PAUSE_RESUME_STREAM, &buf, 1);
 }
 
-void Roomba::SuspendSensorStream()
+void Roomba::suspendSensorStream()
 {
 	unsigned char buf = 0;
 	m_pTransport->SendPacket(OP_PAUSE_RESUME_STREAM, &buf, 1);
@@ -340,12 +340,12 @@ void Roomba::Run()
 	delete buffer;
 }
 
-void Roomba::RunAsync()
+void Roomba::runAsync()
 {
 	unsigned char defaultSensorId[2] = {RIGHT_ENCODER_COUNTS,
 		LEFT_ENCODER_COUNTS,};
 	unsigned char numSensor = 2;
-	this->StartSensorStream(defaultSensorId, numSensor);
+	this->startSensorStream(defaultSensorId, numSensor);
 }
 
 void Roomba::RequestSensor(unsigned char sensorId, unsigned short *value) const
@@ -428,51 +428,51 @@ void Roomba::RequestSensor(unsigned char sensorId, unsigned char *value) const
 }
 
 
-int Roomba::IsRightWheelDropped() const {
+int Roomba::isRightWheelDropped() const {
 	unsigned char buf;
 	RequestSensor(BUMPS_AND_WHEEL_DROPS, &buf);
 	return buf & 0x04 ? true : false;
 }
 
-int Roomba::IsLeftWheelDropped() const {
+int Roomba::isLeftWheelDropped() const {
 	unsigned char buf;
 	RequestSensor(BUMPS_AND_WHEEL_DROPS, &buf);
 	return buf & 0x08 ? true : false;
 }
 
-int Roomba::IsRightBump() const {
+int Roomba::isRightBump() const {
 	unsigned char buf;
 	RequestSensor(BUMPS_AND_WHEEL_DROPS, &buf);
 	return buf & 0x01 ? true : false;
 }
 
-int Roomba::IsLeftBump() const 
+int Roomba::isLeftBump() const 
 {
 	unsigned char buf;
 	RequestSensor(BUMPS_AND_WHEEL_DROPS, &buf);
 	return buf & 0x02 ? true : false;
 }
 
-int Roomba::IsCliffLeft() const
+int Roomba::isCliffLeft() const
 {
 	unsigned char buf;
 	RequestSensor(CLIFF_LEFT, &buf);
 	return buf;
 }
 
-int Roomba::IsCliffFrontLeft() const {
+int Roomba::isCliffFrontLeft() const {
 	unsigned char buf;
 	RequestSensor(CLIFF_FRONT_LEFT, &buf);
 	return buf;
 }
 
-int Roomba::IsCliffFrontRight() const {
+int Roomba::isCliffFrontRight() const {
 	unsigned char buf;
 	RequestSensor(CLIFF_FRONT_RIGHT, &buf);
 	return buf;
 }
 
-int Roomba::IsCliffRight() const {
+int Roomba::isCliffRight() const {
 	unsigned char buf;
 	RequestSensor(CLIFF_RIGHT, &buf);
 	return buf;
@@ -480,62 +480,62 @@ int Roomba::IsCliffRight() const {
 
 
 
-int Roomba::IsVirtualWall() const
+int Roomba::isVirtualWall() const
 {
 	unsigned char buf;
 	RequestSensor(VIRTUAL_WALL, &buf);
 	return buf;
 }
 
-MotorFlag Roomba::IsWheelOvercurrents() const
+MotorFlag Roomba::isWheelOvercurrents() const
 {
 	unsigned char buf;
 	RequestSensor(WHEEL_OVERCURRENTS, &buf);
 	return (MotorFlag)buf;
 }
 
-int Roomba::IsRightWheelOvercurrent() const 
+int Roomba::isRightWheelOvercurrent() const 
 {
-	return IsWheelOvercurrents() & RightWheel ? true : false;
+	return isWheelOvercurrents() & RightWheel ? true : false;
 }
 
-int Roomba::IsLeftWheelOvercurrent() const 
+int Roomba::isLeftWheelOvercurrent() const 
 {
-	return IsWheelOvercurrents() & LeftWheel ? true : false;
+	return isWheelOvercurrents() & LeftWheel ? true : false;
 }
 
-int Roomba::IsMainBrushOvercurrent() const 
+int Roomba::isMainBrushOvercurrent() const 
 {
-	return IsWheelOvercurrents() & MainBrush ? true : false;
+	return isWheelOvercurrents() & MainBrush ? true : false;
 }
 
-int Roomba::IsSideBrushOvercurrent() const 
+int Roomba::isSideBrushOvercurrent() const 
 {
-	return IsWheelOvercurrents() & SideBrush ? true : false;
+	return isWheelOvercurrents() & SideBrush ? true : false;
 }
 
-int Roomba::DirtDetect() const
+int Roomba::dirtDetect() const
 {
 	unsigned char buf;
 	RequestSensor(DIRT_DETECT, &buf);
 	return buf;
 }
 
-unsigned char Roomba::GetInfraredCharacterOmni() const
+unsigned char Roomba::getInfraredCharacterOmni() const
 {
 	unsigned char buf;
 	RequestSensor(INFRARED_CHARACTER_OMNI, &buf);
 	return buf;
 }
 
-unsigned char Roomba::GetInfraredCharacterRight() const
+unsigned char Roomba::getInfraredCharacterRight() const
 {
 	unsigned char buf;
 	RequestSensor(INFRARED_CHARACTER_RIGHT, &buf);
 	return buf;
 }
 
-unsigned char Roomba::GetInfraredCharacterLeft() const
+unsigned char Roomba::getInfraredCharacterLeft() const
 {
 	unsigned char buf;
 	RequestSensor(INFRARED_CHARACTER_LEFT, &buf);
@@ -543,53 +543,53 @@ unsigned char Roomba::GetInfraredCharacterLeft() const
 }
 
 
-ButtonFlag Roomba::GetButtons() const
+ButtonFlag Roomba::getButtons() const
 {
 	unsigned char buf;
 	RequestSensor(BUTTONS, &buf);
 	return (ButtonFlag)buf;
 }
 
-int Roomba::GetDistance() const
+int Roomba::getDistance() const
 {
 	signed short buf;
 	RequestSensor(DISTANCE, &buf);
 	return buf;
 }
 
-int Roomba::GetAngle() const
+int Roomba::getAngle() const
 {
 	signed short buf;
 	RequestSensor(ANGLE, &buf);
 	return buf;
 }
 
-ChargingState Roomba::GetChargingState() const
+ChargingState Roomba::getChargingState() const
 {
 	unsigned char buf;
 	RequestSensor(CHARGING_STATE, &buf);
 	return (ChargingState)buf;
 }
 
-int Roomba::GetVoltage() const {
+int Roomba::getVoltage() const {
 	unsigned short buf;
 	RequestSensor(VOLTAGE, &buf);
 	return buf;
 }
 
-int Roomba::GetCurrent() const {
+int Roomba::getCurrent() const {
 	unsigned short buf;
 	RequestSensor(VOLTAGE, &buf);
 	return buf;
 }
 
-int Roomba::GetTemperature()  const {
+int Roomba::getTemperature()  const {
 	char buf;
 	RequestSensor(TEMPERATURE, &buf);
 	return buf;
 }
 
-Mode Roomba::GetOIMode() const
+Mode Roomba::getOIMode() const
 {
 	unsigned char buf;
 	RequestSensor(OI_MODE, &buf);
@@ -606,28 +606,28 @@ Mode Roomba::GetOIMode() const
 }
 
 
-int Roomba::GetRequestedVelocity() const {
+int Roomba::getRequestedVelocity() const {
 	short buf;
 	RequestSensor(REQUESTED_VELOCITY, &buf);
 	return buf;
 }
 
 
-int Roomba::GetRequestedRadius() const {
+int Roomba::getRequestedRadius() const {
 	short buf;
 	RequestSensor(REQUESTED_RADIUS, &buf);
 	return buf;
 }
 
 
-unsigned short Roomba::GetRightEncoderCounts() const
+unsigned short Roomba::getRightEncoderCounts() const
 {
 	unsigned short buf;
 	RequestSensor(LEFT_ENCODER_COUNTS, &buf);
 	return buf;
 }
 
-unsigned short Roomba::GetLeftEncoderCounts() const
+unsigned short Roomba::getLeftEncoderCounts() const
 {
 	unsigned short buf;
 	RequestSensor(RIGHT_ENCODER_COUNTS, &buf);

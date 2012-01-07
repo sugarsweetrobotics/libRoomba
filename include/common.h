@@ -11,9 +11,16 @@
 #ifdef LIBROOMBA_EXPORTS
 #define LIBROOMBA_API __declspec(dllexport)
 #else
+#ifdef LIBROOMBA_STATIC_EXPORTS
+#define LIBROOMBA_API 
+#else
+
 #define LIBROOMBA_API __declspec(dllimport)
+#endif // LIBROOMBA_STATIC_EXPORTS
 #endif
 
+#else 
+#define LIBROOMBA_API 
 #endif // ifdef WIN32
 
 
@@ -49,6 +56,11 @@ enum OP_LED {
 	LED_DOCK = 0x04,
 	LED_SPOT = 0x02,
 	LED_DEBRIS = 0x01,
+};
+
+enum ReturnCode {
+	PRECONDITION_NOT_MET = -1,
+	ROOMBA_OK = 0,
 };
 
 

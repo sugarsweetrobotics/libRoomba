@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libRoomba", "src\libRoomba.vcproj", "{50AA1F6E-07EF-4D45-921E-4A2FD85E7033}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleDemo", "ConsoleDemo\ConsoleDemo.vcproj", "{921D0CDE-71ED-4B25-B655-DECAB6BBF8BE}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "demo", "example\demo.vcproj", "{921D0CDE-71ED-4B25-B655-DECAB6BBF8BE}"
 	ProjectSection(ProjectDependencies) = postProject
 		{50AA1F6E-07EF-4D45-921E-4A2FD85E7033} = {50AA1F6E-07EF-4D45-921E-4A2FD85E7033}
 	EndProjectSection

@@ -21,7 +21,7 @@ namespace net {
     /**
      * @brief This exception is thrown when Opening COM port is failed.
      */
-    class ComOpenException : ComException  {
+    class ComOpenException : public ComException  {
     public:
       
       /** Constructor.

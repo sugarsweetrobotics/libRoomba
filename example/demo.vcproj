@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="ConsoleDemo"
+	Name="demo"
 	ProjectGUID="{921D0CDE-71ED-4B25-B655-DECAB6BBF8BE}"
 	RootNamespace="ConsoleDemo"
 	Keyword="Win32Proj"
@@ -18,8 +18,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(ConfigurationName)\"
-			IntermediateDirectory="$(ConfigurationName)\"
+			OutputDirectory="$(ProjectName)\\$(ConfigurationName)\"
+			IntermediateDirectory="$(ProjectName)\\$(ConfigurationName)\"
 			ConfigurationType="1"
 			CharacterSet="1"
 			>
@@ -92,8 +92,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(ConfigurationName)\"
-			IntermediateDirectory="$(ConfigurationName)\"
+			OutputDirectory="$(ProjectName)\\$(ConfigurationName)\"
+			IntermediateDirectory="$(ProjectName)\\$(ConfigurationName)\"
 			ConfigurationType="1"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -177,7 +177,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\main.cpp"
+				RelativePath=".\demo.cpp"
 				>
 			</File>
 		</Filter>
