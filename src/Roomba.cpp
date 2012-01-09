@@ -11,27 +11,29 @@ Roomba::Roomba(const char *portName, const int baudrate) :
 m_isStreamMode(0)
 {
 	m_pTransport = new Transport(portName, baudrate);
-	m_pTransport->SendPacket(OP_START);
-	m_CurrentMode = MODE_PASSIVE;
-
-	setMode(MODE_SAFE);
+	start();
 }
 
 
 Roomba::~Roomba(void)
 {
-	setMode(POWER_DOWN);
 	if(m_isStreamMode) {
-		suspendSensorStream();
 		m_isStreamMode = false;
 		Join();
+		suspendSensorStream();
 	}
+	setMode(MODE_POWER_DOWN);
 	delete m_pTransport;
 }
 
 void Roomba::setMode(Mode mode)
 {
 	switch(mode) {
+	case MODE_START:
+		m_pTransport->SendPacket(OP_START);
+		m_CurrentMode = MODE_PASSIVE;
+		break;	
+
 	case MODE_SAFE:
 		m_pTransport->SendPacket(OP_SAFE);
 		m_CurrentMode = MODE_SAFE;
@@ -42,28 +44,28 @@ void Roomba::setMode(Mode mode)
 		m_CurrentMode = MODE_FULL;
 		break;
 		
-	case SPOT_CLEAN:
+	case MODE_SPOT_CLEAN:
 		m_pTransport->SendPacket(OP_SPOT);
 		m_CurrentMode = MODE_PASSIVE;
 		break;
 
-	case NORMAL_CLEAN:
+	case MODE_NORMAL_CLEAN:
 		m_pTransport->SendPacket(OP_CLEAN);
 		m_CurrentMode = MODE_PASSIVE;
 
 		break;
 
-	case MAX_TIME_CLEAN:
+	case MODE_MAX_TIME_CLEAN:
 		m_pTransport->SendPacket(OP_MAX);
 		m_CurrentMode = MODE_PASSIVE;
 		break;
 
-	case DOCK:
+	case MODE_DOCK:
 		m_pTransport->SendPacket(OP_DOCK);
 		m_CurrentMode = MODE_PASSIVE;
 		break;
 
-	case POWER_DOWN:
+	case MODE_POWER_DOWN:
 		m_pTransport->SendPacket(OP_POWER);
 		m_CurrentMode = MODE_PASSIVE;
 		break;
@@ -222,6 +224,8 @@ void Roomba::Run()
 	unsigned char bufSize = 0;
 	unsigned long sum;
 
+	m_AsyncThreadReceiveCounter = 0;
+
 	while(m_isStreamMode) {
 		//Thread::Sleep(10);
 		while(1) {
@@ -256,6 +260,8 @@ void Roomba::Run()
 			continue;
 		}
 
+		m_AsyncThreadReceiveCounter++;
+
 		int counter = 0;
 		do {
 			unsigned char sensorId = buffer[counter];
@@ -287,7 +293,9 @@ void Roomba::Run()
 			case STASIS:
 				dataBuf |= buffer[counter];
 				counter++;
+				m_AsyncThreadMutex.Lock();
 				m_SensorDataMap[(SensorID)sensorId] = dataBuf;
+				m_AsyncThreadMutex.Unlock();
 				break;
 			case DISTANCE:
 			case ANGLE:
@@ -329,7 +337,9 @@ void Roomba::Run()
 				dataBuf |= ((unsigned short)buffer[counter] << 8);
 				counter++;
 #endif
+				m_AsyncThreadMutex.Lock();
 				m_SensorDataMap[(SensorID)sensorId] = dataBuf;
+				m_AsyncThreadMutex.Unlock();
 				break;
 			default:
 				break;
@@ -340,6 +350,14 @@ void Roomba::Run()
 	delete buffer;
 }
 
+void Roomba::waitPacketReceived() {
+	unsigned long buf = m_AsyncThreadReceiveCounter;
+	while(buf == m_AsyncThreadReceiveCounter) {
+		Thread::Sleep(1);
+	}
+}
+
+
 void Roomba::runAsync()
 {
 	unsigned char defaultSensorId[2] = {RIGHT_ENCODER_COUNTS,
@@ -348,14 +366,26 @@ void Roomba::runAsync()
 	this->startSensorStream(defaultSensorId, numSensor);
 }
 
-void Roomba::RequestSensor(unsigned char sensorId, unsigned short *value) const
+void Roomba::RequestSensor(unsigned char sensorId, unsigned short *value) 
 {
-	std::map<SensorID, unsigned short>::const_iterator it = m_SensorDataMap.find((SensorID)sensorId);
-	if(it != m_SensorDataMap.end()) {
-		unsigned short buf = (*it).second;
-		*value = 0;
-		*value |= buf;
-		return;
+	if(m_isStreamMode) {
+		m_AsyncThreadMutex.Lock();
+		std::map<SensorID, unsigned short>::const_iterator it = m_SensorDataMap.find((SensorID)sensorId);
+		if(it != m_SensorDataMap.end()) {
+			*value = 0;
+			*value |= (*it).second;
+			m_AsyncThreadMutex.Unlock();
+			return;
+		} else {
+			m_SensorDataMap[(SensorID)sensorId] = 0;
+			m_AsyncThreadMutex.Unlock();
+			waitPacketReceived();
+			*value = 0;
+			m_AsyncThreadMutex.Lock();
+			*value |= m_SensorDataMap[(SensorID)sensorId];
+			m_AsyncThreadMutex.Unlock();
+			return;
+		}
 	}
 
 	unsigned char data[2];
@@ -369,15 +399,26 @@ void Roomba::RequestSensor(unsigned char sensorId, unsigned short *value) const
 #endif
 }
 
-void Roomba::RequestSensor(unsigned char sensorId, short *value) const
+void Roomba::RequestSensor(unsigned char sensorId, short *value)
 {
-
-	std::map<SensorID, unsigned short>::const_iterator it = this->m_SensorDataMap.find((SensorID)sensorId);
-	if(it != m_SensorDataMap.end()) {
-		unsigned short buf = (*it).second;
-		*value = 0;
-		*value |= buf;
-		return;
+	if(m_isStreamMode) {
+		m_AsyncThreadMutex.Lock();
+		std::map<SensorID, unsigned short>::const_iterator it = m_SensorDataMap.find((SensorID)sensorId);
+		if(it != m_SensorDataMap.end()) {
+			*value = 0;
+			*value |= (*it).second;
+			m_AsyncThreadMutex.Unlock();
+			return;
+		} else {
+			m_SensorDataMap[(SensorID)sensorId] = 0;
+			m_AsyncThreadMutex.Unlock();
+			waitPacketReceived();
+			*value = 0;
+			m_AsyncThreadMutex.Lock();
+			*value |= m_SensorDataMap[(SensorID)sensorId];
+			m_AsyncThreadMutex.Unlock();
+			return;
+		}
 	}
 
 	unsigned char data[2];
@@ -391,15 +432,26 @@ void Roomba::RequestSensor(unsigned char sensorId, short *value) const
 #endif
 }
 
-void Roomba::RequestSensor(unsigned char sensorId, char *value) const
+void Roomba::RequestSensor(unsigned char sensorId, char *value)
 {
-
-	std::map<SensorID, unsigned short>::const_iterator it = this->m_SensorDataMap.find((SensorID)sensorId);
-	if(it != m_SensorDataMap.end()) {
-		unsigned short buf = (*it).second;
-		*value = 0;
-		*value |= (char)buf;
-		return;
+	if(m_isStreamMode) {
+		m_AsyncThreadMutex.Lock();
+		std::map<SensorID, unsigned short>::const_iterator it = m_SensorDataMap.find((SensorID)sensorId);
+		if(it != m_SensorDataMap.end()) {
+			*value = 0;
+			*value |= (*it).second;
+			m_AsyncThreadMutex.Unlock();
+			return;
+		} else {
+			m_SensorDataMap[(SensorID)sensorId] = 0;
+			m_AsyncThreadMutex.Unlock();
+			waitPacketReceived();
+			*value = 0;
+			m_AsyncThreadMutex.Lock();
+			*value |= m_SensorDataMap[(SensorID)sensorId];
+			m_AsyncThreadMutex.Unlock();
+			return;
+		}
 	}
 
 	char data[1];
@@ -409,15 +461,26 @@ void Roomba::RequestSensor(unsigned char sensorId, char *value) const
 	memcpy(value, data, 1);
 }
 
-void Roomba::RequestSensor(unsigned char sensorId, unsigned char *value) const
+void Roomba::RequestSensor(unsigned char sensorId, unsigned char *value)
 {
-
-	std::map<SensorID, unsigned short>::const_iterator it = this->m_SensorDataMap.find((SensorID)sensorId);
-	if(it != m_SensorDataMap.end()) {
-		unsigned short buf = (*it).second;
-		*value = 0;
-		*value |= (unsigned char)buf;
-		return;
+	if(m_isStreamMode) {
+		m_AsyncThreadMutex.Lock();
+		std::map<SensorID, unsigned short>::const_iterator it = m_SensorDataMap.find((SensorID)sensorId);
+		if(it != m_SensorDataMap.end()) {
+			*value = 0;
+			*value |= (*it).second;
+			m_AsyncThreadMutex.Unlock();
+			return;
+		} else {
+			m_SensorDataMap[(SensorID)sensorId] = 0;
+			m_AsyncThreadMutex.Unlock();
+			waitPacketReceived();
+			*value = 0;
+			m_AsyncThreadMutex.Lock();
+			*value |= m_SensorDataMap[(SensorID)sensorId];
+			m_AsyncThreadMutex.Unlock();
+			return;
+		}
 	}
 
 	unsigned char data[1];
@@ -428,51 +491,51 @@ void Roomba::RequestSensor(unsigned char sensorId, unsigned char *value) const
 }
 
 
-int Roomba::isRightWheelDropped() const {
+int Roomba::isRightWheelDropped() {
 	unsigned char buf;
 	RequestSensor(BUMPS_AND_WHEEL_DROPS, &buf);
 	return buf & 0x04 ? true : false;
 }
 
-int Roomba::isLeftWheelDropped() const {
+int Roomba::isLeftWheelDropped() {
 	unsigned char buf;
 	RequestSensor(BUMPS_AND_WHEEL_DROPS, &buf);
 	return buf & 0x08 ? true : false;
 }
 
-int Roomba::isRightBump() const {
+int Roomba::isRightBump() {
 	unsigned char buf;
 	RequestSensor(BUMPS_AND_WHEEL_DROPS, &buf);
 	return buf & 0x01 ? true : false;
 }
 
-int Roomba::isLeftBump() const 
+int Roomba::isLeftBump() 
 {
 	unsigned char buf;
 	RequestSensor(BUMPS_AND_WHEEL_DROPS, &buf);
 	return buf & 0x02 ? true : false;
 }
 
-int Roomba::isCliffLeft() const
+int Roomba::isCliffLeft()
 {
 	unsigned char buf;
 	RequestSensor(CLIFF_LEFT, &buf);
 	return buf;
 }
 
-int Roomba::isCliffFrontLeft() const {
+int Roomba::isCliffFrontLeft() {
 	unsigned char buf;
 	RequestSensor(CLIFF_FRONT_LEFT, &buf);
 	return buf;
 }
 
-int Roomba::isCliffFrontRight() const {
+int Roomba::isCliffFrontRight() {
 	unsigned char buf;
 	RequestSensor(CLIFF_FRONT_RIGHT, &buf);
 	return buf;
 }
 
-int Roomba::isCliffRight() const {
+int Roomba::isCliffRight() {
 	unsigned char buf;
 	RequestSensor(CLIFF_RIGHT, &buf);
 	return buf;
@@ -480,116 +543,116 @@ int Roomba::isCliffRight() const {
 
 
 
-int Roomba::isVirtualWall() const
+int Roomba::isVirtualWall()
 {
 	unsigned char buf;
 	RequestSensor(VIRTUAL_WALL, &buf);
 	return buf;
 }
 
-MotorFlag Roomba::isWheelOvercurrents() const
+Roomba::MotorFlag Roomba::isWheelOvercurrents()
 {
 	unsigned char buf;
 	RequestSensor(WHEEL_OVERCURRENTS, &buf);
 	return (MotorFlag)buf;
 }
 
-int Roomba::isRightWheelOvercurrent() const 
+int Roomba::isRightWheelOvercurrent() 
 {
 	return isWheelOvercurrents() & RightWheel ? true : false;
 }
 
-int Roomba::isLeftWheelOvercurrent() const 
+int Roomba::isLeftWheelOvercurrent() 
 {
 	return isWheelOvercurrents() & LeftWheel ? true : false;
 }
 
-int Roomba::isMainBrushOvercurrent() const 
+int Roomba::isMainBrushOvercurrent() 
 {
 	return isWheelOvercurrents() & MainBrush ? true : false;
 }
 
-int Roomba::isSideBrushOvercurrent() const 
+int Roomba::isSideBrushOvercurrent() 
 {
 	return isWheelOvercurrents() & SideBrush ? true : false;
 }
 
-int Roomba::dirtDetect() const
+int Roomba::dirtDetect()
 {
 	unsigned char buf;
 	RequestSensor(DIRT_DETECT, &buf);
 	return buf;
 }
 
-unsigned char Roomba::getInfraredCharacterOmni() const
+char Roomba::getInfraredCharacterOmni()
 {
-	unsigned char buf;
+	char buf;
 	RequestSensor(INFRARED_CHARACTER_OMNI, &buf);
 	return buf;
 }
 
-unsigned char Roomba::getInfraredCharacterRight() const
+char Roomba::getInfraredCharacterRight()
 {
-	unsigned char buf;
+	char buf;
 	RequestSensor(INFRARED_CHARACTER_RIGHT, &buf);
 	return buf;
 }
 
-unsigned char Roomba::getInfraredCharacterLeft() const
+char Roomba::getInfraredCharacterLeft()
 {
-	unsigned char buf;
+	char buf;
 	RequestSensor(INFRARED_CHARACTER_LEFT, &buf);
 	return buf;
 }
 
 
-ButtonFlag Roomba::getButtons() const
+Roomba::ButtonFlag Roomba::getButtons()
 {
 	unsigned char buf;
 	RequestSensor(BUTTONS, &buf);
 	return (ButtonFlag)buf;
 }
 
-int Roomba::getDistance() const
+int Roomba::getDistance()
 {
 	signed short buf;
 	RequestSensor(DISTANCE, &buf);
 	return buf;
 }
 
-int Roomba::getAngle() const
+int Roomba::getAngle()
 {
 	signed short buf;
 	RequestSensor(ANGLE, &buf);
 	return buf;
 }
 
-ChargingState Roomba::getChargingState() const
+Roomba::ChargingState Roomba::getChargingState()
 {
 	unsigned char buf;
 	RequestSensor(CHARGING_STATE, &buf);
 	return (ChargingState)buf;
 }
 
-int Roomba::getVoltage() const {
+int Roomba::getVoltage() {
 	unsigned short buf;
 	RequestSensor(VOLTAGE, &buf);
 	return buf;
 }
 
-int Roomba::getCurrent() const {
+int Roomba::getCurrent() {
 	unsigned short buf;
 	RequestSensor(VOLTAGE, &buf);
 	return buf;
 }
 
-int Roomba::getTemperature()  const {
+int Roomba::getTemperature() {
 	char buf;
 	RequestSensor(TEMPERATURE, &buf);
 	return buf;
 }
 
-Mode Roomba::getOIMode() const
+Roomba::Mode Roomba::getOIMode()
 {
 	unsigned char buf;
 	RequestSensor(OI_MODE, &buf);
@@ -606,28 +669,28 @@ Mode Roomba::getOIMode() const
 }
 
 
-int Roomba::getRequestedVelocity() const {
+int Roomba::getRequestedVelocity() {
 	short buf;
 	RequestSensor(REQUESTED_VELOCITY, &buf);
 	return buf;
 }
 
 
-int Roomba::getRequestedRadius() const {
+int Roomba::getRequestedRadius() {
 	short buf;
 	RequestSensor(REQUESTED_RADIUS, &buf);
 	return buf;
 }
 
 
-unsigned short Roomba::getRightEncoderCounts() const
+unsigned short Roomba::getRightEncoderCounts()
 {
 	unsigned short buf;
 	RequestSensor(LEFT_ENCODER_COUNTS, &buf);
 	return buf;
 }
 
-unsigned short Roomba::getLeftEncoderCounts() const
+unsigned short Roomba::getLeftEncoderCounts()
 {
 	unsigned short buf;
 	RequestSensor(RIGHT_ENCODER_COUNTS, &buf);

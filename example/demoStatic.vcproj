@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="demo"
-	ProjectGUID="{921D0CDE-71ED-4B25-B655-DECAB6BBF8BE}"
-	RootNamespace="demo"
+	Name="demoStatic"
+	ProjectGUID="{21E34EA0-838C-4FAE-9BEB-9F4A6CE1C8AD}"
+	RootNamespace="demoStatic"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libRoombaD.lib"
+				AdditionalDependencies="libRoombaStaticD.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(SolutionDir)lib"
 				GenerateDebugInformation="true"
@@ -136,7 +136,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libRoomba.lib"
+				AdditionalDependencies="libRoombaStatic.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(SolutionDir)lib"
 				GenerateDebugInformation="true"
@@ -177,7 +177,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\demo.cpp"
+				RelativePath=".\demoStatic.cpp"
 				>
 			</File>
 		</Filter>

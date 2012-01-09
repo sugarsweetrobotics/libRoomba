@@ -36,6 +36,48 @@
 namespace net {
 	namespace ysuga {
 
+		class Mutex {
+		private:
+#ifdef WIN32
+			HANDLE m_Handle;
+#else
+
+#endif
+
+
+		public:
+			Mutex() {
+#ifdef WIN32
+				m_Handle = ::CreateMutex(NULL, 0, NULL);
+#endif
+			}
+
+			virtual ~Mutex() {
+#ifdef WIN32
+				::CloseHandle(m_Handle);
+#else
+
+#endif
+			}
+
+		public:
+			void Lock() {
+#ifdef WIN32
+				::WaitForSingleObject(m_Handle, INFINITE);
+#else
+
+#endif
+			}
+
+			void Unlock() {
+#ifdef WIN32
+				::ReleaseMutex(m_Handle);
+#else
+
+#endif
+			}
+		};
+
 		class Thread
 		{
 		private:

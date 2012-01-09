@@ -12,6 +12,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libRoombaStatic", "src\libR
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "libRoombaSetup", "libRoombaSetup\libRoombaSetup.vdproj", "{8B31D864-2D24-4DCD-9CA1-5D953DA007C4}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "demoStatic", "example\demoStatic.vcproj", "{21E34EA0-838C-4FAE-9BEB-9F4A6CE1C8AD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2D33F13B-CC3E-4DDB-9CF1-E8C93FDB5B1B} = {2D33F13B-CC3E-4DDB-9CF1-E8C93FDB5B1B}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -32,6 +37,10 @@ Global
 		{2D33F13B-CC3E-4DDB-9CF1-E8C93FDB5B1B}.Release|Win32.Build.0 = Release|Win32
 		{8B31D864-2D24-4DCD-9CA1-5D953DA007C4}.Debug|Win32.ActiveCfg = Debug
 		{8B31D864-2D24-4DCD-9CA1-5D953DA007C4}.Release|Win32.ActiveCfg = Release
+		{21E34EA0-838C-4FAE-9BEB-9F4A6CE1C8AD}.Debug|Win32.ActiveCfg = Debug|Win32
+		{21E34EA0-838C-4FAE-9BEB-9F4A6CE1C8AD}.Debug|Win32.Build.0 = Debug|Win32
+		{21E34EA0-838C-4FAE-9BEB-9F4A6CE1C8AD}.Release|Win32.ActiveCfg = Release|Win32
+		{21E34EA0-838C-4FAE-9BEB-9F4A6CE1C8AD}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -89,7 +89,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(OutDir)libRoombaD.dll&quot; &quot;$(SolutionDir)bin&quot;&#x0D;&#x0A;copy &quot;$(OutDir)libRoombaD.dll&quot; &quot;$(SolutionDir)ConsoleDemo&quot;&#x0D;&#x0A;copy &quot;$(OutDir)libRoombaD.dll&quot; &quot;$(SolutionDir)python&quot;&#x0D;&#x0A;copy &quot;$(OutDir)libRoombaD.lib&quot; &quot;$(SolutionDir)lib&quot;&#x0D;&#x0A;"
+				CommandLine="copy &quot;$(OutDir)libRoombaD.dll&quot; &quot;$(SolutionDir)bin&quot;&#x0D;&#x0A;copy &quot;$(OutDir)libRoombaD.dll&quot; &quot;$(SolutionDir)example&quot;&#x0D;&#x0A;copy &quot;$(OutDir)libRoombaD.dll&quot; &quot;$(SolutionDir)python&quot;&#x0D;&#x0A;copy &quot;$(OutDir)libRoombaD.lib&quot; &quot;$(SolutionDir)lib&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -165,7 +165,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(OutDir)libRoomba.dll&quot; &quot;$(SolutionDir)bin&quot;&#x0D;&#x0A;copy &quot;$(OutDir)libRoomba.dll&quot; &quot;$(SolutionDir)python&quot;&#x0D;&#x0A;copy &quot;$(OutDir)libRoomba.dll&quot; &quot;$(SolutionDir)ConsoleDemo&quot;&#x0D;&#x0A;copy &quot;$(OutDir)libRoomba.lib&quot; &quot;$(SolutionDir)lib&quot;&#x0D;&#x0A;"
+				CommandLine="copy &quot;$(OutDir)libRoomba.dll&quot; &quot;$(SolutionDir)bin&quot;&#x0D;&#x0A;copy &quot;$(OutDir)libRoomba.dll&quot; &quot;$(SolutionDir)python&quot;&#x0D;&#x0A;copy &quot;$(OutDir)libRoomba.dll&quot; &quot;$(SolutionDir)example&quot;&#x0D;&#x0A;copy &quot;$(OutDir)libRoomba.lib&quot; &quot;$(SolutionDir)lib&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
