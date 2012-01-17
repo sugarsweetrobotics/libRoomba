@@ -10,6 +10,10 @@ using namespace net::ysuga::roomba;
 Roomba::Roomba(const char *portName, const int baudrate) :
 m_isStreamMode(0)
 {
+	m_MainBrushFlag = MOTOR_OFF;
+	m_SideBrushFlag = MOTOR_OFF;
+	m_VacuumFlag = MOTOR_OFF;
+
 	m_pTransport = new Transport(portName, baudrate);
 	start();
 }
@@ -73,6 +77,8 @@ void Roomba::setMode(Mode mode)
 	default:
 		break;
 	}
+
+	Thread::Sleep(100);
 }
 
 void Roomba::drive(unsigned short translation, unsigned short turnRadius) {
@@ -82,40 +88,38 @@ void Roomba::drive(unsigned short translation, unsigned short turnRadius) {
 
 	unsigned char data[4];
 #ifdef __BIG_ENDIAN__
-	data[0] = (translation >> 8) & 0xFF;
-	data[1] = translation & 0xFF;
-	data[2] = (turnRadius >> 8) & 0xFF;
-	data[3] = turnRadius & 0xFF;
-#else
 	data[0] = translation & 0xFF;
 	data[1] = (translation >> 8) & 0xFF;
 	data[2] = turnRadius & 0xFF;
 	data[3] = (turnRadius >> 8) & 0xFF;
-	
-
+#else
+	data[0] = (translation >> 8) & 0xFF;
+	data[1] = translation & 0xFF;
+	data[2] = (turnRadius >> 8) & 0xFF;
+	data[3] = turnRadius & 0xFF;
 #endif
 	m_pTransport->SendPacket(OP_DRIVE, data, 4);
 }
 
-void Roomba::driveDirect(unsigned short rightWheel, unsigned short leftWheel) {
+void Roomba::driveDirect(short rightWheel, short leftWheel) {
 	if(getMode() != MODE_SAFE && getMode() !=MODE_FULL) {
 		throw PreconditionNotMetError();
 	}
 
 	unsigned char data[4];
 #ifdef __BIG_ENDIAN__
-	data[0] = (rightWheel >> 8) & 0xFF;
-	data[1] = rightWheel & 0xFF;
-	data[2] = (leftWheel >> 8) & 0xFF;
-	data[3] = leftWheel & 0xFF;
-#else
-	data[0] = rightWheel & 0xFF;
 	data[1] = (rightWheel >> 8) & 0xFF;
-	data[2] = leftWheel & 0xFF;
+	data[0] = rightWheel & 0xFF;
 	data[3] = (leftWheel >> 8) & 0xFF;
+	data[2] = leftWheel & 0xFF;
+#else
+	data[1] = rightWheel & 0xFF;
+	data[0] = (rightWheel >> 8) & 0xFF;
+	data[3] = leftWheel & 0xFF;
+	data[2] = (leftWheel >> 8) & 0xFF;
 
 #endif
-	m_pTransport->SendPacket(OP_DRIVE, data, 4);
+	m_pTransport->SendPacket(OP_DRIVE_DIRECT, data, 4);
 }
 
 void Roomba::drivePWM(unsigned short rightWheel, unsigned short leftWheel) {
@@ -125,15 +129,15 @@ void Roomba::drivePWM(unsigned short rightWheel, unsigned short leftWheel) {
 
 	unsigned char data[4];
 #ifdef __BIG_ENDIAN__
-	data[0] = (rightWheel >> 8) & 0xFF;
-	data[1] = rightWheel & 0xFF;
-	data[2] = (leftWheel >> 8) & 0xFF;
-	data[3] = leftWheel & 0xFF;
-#else
 	data[0] = rightWheel & 0xFF;
 	data[1] = (rightWheel >> 8) & 0xFF;
 	data[2] = leftWheel & 0xFF;
 	data[3] = (leftWheel >> 8) & 0xFF;
+#else
+	data[0] = (rightWheel >> 8) & 0xFF;
+	data[1] = rightWheel & 0xFF;
+	data[2] = (leftWheel >> 8) & 0xFF;
+	data[3] = leftWheel & 0xFF;
 
 #endif
 	m_pTransport->SendPacket(OP_DRIVE_PWM, data, 4);

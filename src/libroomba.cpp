@@ -45,86 +45,52 @@ LIBROOMBA_API int Roomba_getMode(const int hRoomba, int *mode)
 	return 0;
 }
 
-
-/**
- * @brief Start Open Interface Control Mode
- * This function is automatically called when the Roomba class object is created.
- *
- */
 LIBROOMBA_API void Roomba_start(const int hRoomba)
 {
 	g_pRoomba[hRoomba]->start();
 }
 
-/**
- * @brief Start Normal Clean Mode
- */
 LIBROOMBA_API void Roomba_clean(const int hRoomba)
 {
 	g_pRoomba[hRoomba]->clean();
 }
 
-
-/**
- * @brief Start Spot Clean
- */
 LIBROOMBA_API void Roomba_spotClean(const int hRoomba)
 {
 	g_pRoomba[hRoomba]->spotClean();
 }
 
-
-/**
- * @brief Start Maximum Time Clean Mode
- */
 LIBROOMBA_API void Roomba_maxClean(const int hRoomba)
 {
 	g_pRoomba[hRoomba]->maxClean();
 }
 
-
-/**
- * @brief Start to search Dock station
- */
 LIBROOMBA_API void Roomba_dock(const int hRoomba)
 {
 	g_pRoomba[hRoomba]->dock();
 }
 
-
-/**
- * @brief Power Down
- */
 LIBROOMBA_API void Roomba_powerDown(const int hRoomba)
 {
 	g_pRoomba[hRoomba]->powerDown();
 }
 
-/**
- * @brief Safe Control Mode
- */
 LIBROOMBA_API void Roomba_safeControl(const int hRoomba)
 {
 	g_pRoomba[hRoomba]->safeControl();
 }
 
-/**
- * @brief Full Control Mode
- */
 LIBROOMBA_API void Roomba_fullControl(const int hRoomba)
 {
 	g_pRoomba[hRoomba]->fullControl();
 }
-
-
-
 
 LIBROOMBA_API int Roomba_drive(const int hRoomba, const short translationVelocity, const short turnRadius)
 {
 	try {
 		g_pRoomba[hRoomba]->drive(translationVelocity, turnRadius);
 	} catch (PreconditionNotMetError &e) {
-		std::cerr << "Error in Roomba_drive():" << e.what() << std::endl;
+		std::cerr << "Error in " << __FUNCTION__ << " " << e.what() << std::endl;
 		return PRECONDITION_NOT_MET;
 	}
 	return 0;
@@ -135,7 +101,62 @@ LIBROOMBA_API int Roomba_driveDirect(const int hRoomba, const short rightWheelVe
 	try {
 		g_pRoomba[hRoomba]->driveDirect(rightWheelVelocity, leftWheelVelocity);
 	} catch (PreconditionNotMetError &e) {
-		std::cerr << "Error in Roomba_drive():" << e.what() << std::endl;
+		std::cerr << "Error in " << __FUNCTION__ << " " << e.what() << std::endl;
+		return PRECONDITION_NOT_MET;
+	}
+	return 0;
+}
+
+LIBROOMBA_API int Roomba_drivePWM(const int hRoomba, const short rightWheel, const short leftWheel)
+{
+	try {
+		g_pRoomba[hRoomba]->drivePWM(rightWheel, leftWheel);
+	} catch (PreconditionNotMetError &e) {
+		std::cerr << "Error in " << __FUNCTION__ << " " << e.what() << std::endl;
+		return PRECONDITION_NOT_MET;
+	}
+	return 0;
+}
+
+LIBROOMBA_API int Roomba_driveMotors(const int hRoomba, const int mainBrush, const int sideBrush, const int vacuum)
+{
+	try {
+		g_pRoomba[hRoomba]->driveMotors((Roomba::Motors)mainBrush, (Roomba::Motors)sideBrush, (Roomba::Motors)vacuum);
+	} catch (PreconditionNotMetError &e) {
+		std::cerr << "Error in " << __FUNCTION__ << " " << e.what() << std::endl;
+		return PRECONDITION_NOT_MET;
+	}
+	return 0;
+}
+
+LIBROOMBA_API int Roomba_driveMainBrsuh(const int hRoomba, const int flag)
+{
+	try {
+		g_pRoomba[hRoomba]->driveMainBrush((Roomba::Motors)flag);
+	} catch (PreconditionNotMetError &e) {
+		std::cerr << "Error in " << __FUNCTION__ << " " << e.what() << std::endl;
+		return PRECONDITION_NOT_MET;
+	}
+	return 0;
+}
+
+LIBROOMBA_API int Roomba_driveSideBrsuh(const int hRoomba, const int flag)
+{
+	try {
+		g_pRoomba[hRoomba]->driveSideBrush((Roomba::Motors)flag);
+	} catch (PreconditionNotMetError &e) {
+		std::cerr << "Error in " << __FUNCTION__ << " " << e.what() << std::endl;
+		return PRECONDITION_NOT_MET;
+	}
+	return 0;
+}
+
+LIBROOMBA_API int Roomba_driveVacuum(const int hRoomba, const int flag)
+{
+	try {
+		g_pRoomba[hRoomba]->driveVacuum((Roomba::Motors)flag);
+	} catch (PreconditionNotMetError &e) {
+		std::cerr << "Error in " << __FUNCTION__ << " " << e.what() << std::endl;
 		return PRECONDITION_NOT_MET;
 	}
 	return 0;

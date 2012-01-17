@@ -180,6 +180,10 @@
 				RelativePath=".\demoStatic.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\YConsole.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="ヘッダー ファイル"
