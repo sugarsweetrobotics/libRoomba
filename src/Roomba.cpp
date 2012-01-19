@@ -14,6 +14,9 @@ m_isStreamMode(0)
 	m_SideBrushFlag = MOTOR_OFF;
 	m_VacuumFlag = MOTOR_OFF;
 
+	
+	m_ledFlag = m_intensity = m_color = 0;
+
 	m_pTransport = new Transport(portName, baudrate);
 	start();
 }
@@ -364,9 +367,9 @@ void Roomba::waitPacketReceived() {
 
 void Roomba::runAsync()
 {
-	unsigned char defaultSensorId[2] = {RIGHT_ENCODER_COUNTS,
-		LEFT_ENCODER_COUNTS,};
-	unsigned char numSensor = 2;
+	unsigned char defaultSensorId[3] = {RIGHT_ENCODER_COUNTS,
+		LEFT_ENCODER_COUNTS, BUMPS_AND_WHEEL_DROPS};
+	unsigned char numSensor = 3;
 	this->startSensorStream(defaultSensorId, numSensor);
 }
 

@@ -174,6 +174,71 @@ LIBROOMBA_API int Roomba_setLED(const int hRoomba, unsigned char leds, unsigned 
 	return 0;
 }
 
+LIBROOMBA_API int Roomba_setDockLED(const int hRoomba, const int flag)
+{	
+	try {
+		g_pRoomba[hRoomba]->setDockLED(flag);
+	} catch (PreconditionNotMetError &e) {
+		std::cerr << "Error in Roomba_" << __FUNCTION__ << ":" << e.what() << std::endl;
+		return PRECONDITION_NOT_MET;
+	}
+	return 0;	
+}
+LIBROOMBA_API int Roomba_setRobotLED(const int hRoomba, const int flag)
+{	
+	try {
+		g_pRoomba[hRoomba]->setRobotLED(flag);
+	} catch (PreconditionNotMetError &e) {
+		std::cerr << "Error in Roomba_" << __FUNCTION__ << ":" << e.what() << std::endl;
+		return PRECONDITION_NOT_MET;
+	}
+	return 0;	
+}
+
+LIBROOMBA_API int Roomba_setDebrisLED(const int hRoomba, const int flag)
+{	
+	try {
+		g_pRoomba[hRoomba]->setDebrisLED(flag);
+	} catch (PreconditionNotMetError &e) {
+		std::cerr << "Error in Roomba_" << __FUNCTION__ << ":" << e.what() << std::endl;
+		return PRECONDITION_NOT_MET;
+	}
+	return 0;	
+}
+
+LIBROOMBA_API int Roomba_setSpotLED(const int hRoomba, const int flag)
+{	
+	try {
+		g_pRoomba[hRoomba]->setSpotLED(flag);
+	} catch (PreconditionNotMetError &e) {
+		std::cerr << "Error in Roomba_" << __FUNCTION__ << ":" << e.what() << std::endl;
+		return PRECONDITION_NOT_MET;
+	}
+	return 0;	
+}
+
+LIBROOMBA_API int Roomba_setCleanLEDIntensity(const int hRoomba, const unsigned char intensity)
+{	
+	try {
+		g_pRoomba[hRoomba]->setCleanLEDIntensity(intensity);
+	} catch (PreconditionNotMetError &e) {
+		std::cerr << "Error in Roomba_" << __FUNCTION__ << ":" << e.what() << std::endl;
+		return PRECONDITION_NOT_MET;
+	}
+	return 0;	
+}
+
+LIBROOMBA_API int Roomba_setCleanLEDColor(const int hRoomba, const unsigned char color)
+{	
+	try {
+		g_pRoomba[hRoomba]->setCleanLEDColor(color);
+	} catch (PreconditionNotMetError &e) {
+		std::cerr << "Error in Roomba_" << __FUNCTION__ << ":" << e.what() << std::endl;
+		return PRECONDITION_NOT_MET;
+	}
+	return 0;	
+}
+
 
 LIBROOMBA_API int Roomba_isRightWheelDropped(const int hRoomba, int *flag)
 {
