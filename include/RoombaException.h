@@ -21,12 +21,12 @@ namespace net {
 					this->m_msg = msg;
 				}
 
-				virtual ~RoombaException() {
+				virtual ~RoombaException() throw() {
 				}
 
 
 			public:
-				const char* what() const {
+				const char* what() const throw() {
 					return m_msg.c_str();
 				}
 			};
@@ -40,7 +40,7 @@ namespace net {
 				PreconditionNotMetError() : RoombaException("Pre-Condition Not Met") {
 				}
 
-				~PreconditionNotMetError() {
+		    ~PreconditionNotMetError() throw() {
 				}
 			};
 

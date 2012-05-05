@@ -7,13 +7,20 @@
 using namespace net::ysuga;
 using namespace net::ysuga::roomba;
 
+void usage() {
+  std::cout << "USAGE: demo /dev/ttyUSB0" << std::endl;
+}
 
 
-int main(void) {
+int main(const int argc, const char* argv[]) {
+  if(argc != 2) {
+    usage();
+    return 0;
+  }
 	try {
 		bool endflag = false;
 		init_scr();
-		Roomba roomba("\\\\.\\COM16");
+		Roomba roomba(argv[1]);
 		
 		roomba.safeControl();
 		roomba.runAsync();

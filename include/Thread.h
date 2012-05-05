@@ -22,6 +22,10 @@
 #define LIBTHREAD_API __declspec(dllimport)
 #endif
 
+#else
+#define LIBTHREAD_API 
+
+
 #endif // ifdef WIN32
 
 
@@ -29,7 +33,8 @@
 #include <windows.h>
 #define THREAD_ROUTINE DWORD WINAPI
 #else
-
+#include <pthread.h>
+#define THREAD_ROUTINE void*
 #endif
 
 
@@ -41,7 +46,7 @@ namespace net {
 #ifdef WIN32
 			HANDLE m_Handle;
 #else
-
+			pthread_mutex_t m_Handle;
 #endif
 
 
@@ -49,6 +54,8 @@ namespace net {
 			Mutex() {
 #ifdef WIN32
 				m_Handle = ::CreateMutex(NULL, 0, NULL);
+#else
+				pthread_mutex_init(&m_Handle, NULL);
 #endif
 			}
 
@@ -56,7 +63,7 @@ namespace net {
 #ifdef WIN32
 				::CloseHandle(m_Handle);
 #else
-
+			  pthread_mutex_destroy(&m_Handle);
 #endif
 			}
 
@@ -65,7 +72,8 @@ namespace net {
 #ifdef WIN32
 				::WaitForSingleObject(m_Handle, INFINITE);
 #else
-
+			  
+			  pthread_mutex_lock(&m_Handle);
 #endif
 			}
 
@@ -73,7 +81,7 @@ namespace net {
 #ifdef WIN32
 				::ReleaseMutex(m_Handle);
 #else
-
+			  pthread_mutex_unlock(&m_Handle);
 #endif
 			}
 		};
@@ -85,7 +93,7 @@ namespace net {
 			HANDLE m_Handle;
 			DWORD m_ThreadId;
 #else
-
+			pthread_t m_Handle;
 #endif
 		public:
 			LIBTHREAD_API Thread(void);

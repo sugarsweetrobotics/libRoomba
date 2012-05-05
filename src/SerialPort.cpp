@@ -20,7 +20,7 @@
 #include <sys/types.h>
 #include <sys/ioctl.h>
 #include <fcntl.h>
-#include <termio.h>
+#include <termios.h>
 #include <errno.h>
 #include <signal.h>
 #define _POSIX_SOURCE 1
