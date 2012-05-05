@@ -42,7 +42,10 @@ void Thread::Sleep(unsigned long milliSeconds)
 #ifdef WIN32
 	::Sleep(milliSeconds);
 #else
-
+  struct timespec interval;
+  interval.tv_sec = milliSeconds / 1000;
+  interval.tv_nsec = (milliSeconds % 1000) * 1000000;
+  nanosleep(&interval, NULL);
 #endif
 }
 
