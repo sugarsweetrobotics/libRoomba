@@ -203,7 +203,6 @@ int main(const int argc, const char* argv[]) {
 		}
 
 		exit_scr();
-		roomba.safeControl();
 
 	} catch (net::ysuga::ComOpenException &e) {
 		std::cerr << "Exception Occured:" << e.what()  << std::endl;

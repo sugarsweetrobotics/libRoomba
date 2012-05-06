@@ -56,20 +56,24 @@ static void exit_scr() {
 #ifdef WIN32
 	system("cls");
 #else
+	system("reset");
 #endif
 }
 
- static int key;
-
 static int myKbhit() {
 #ifdef WIN32
-	return _kbhit();
+  return _kbhit();
 #else
-    key = getchar();
-    if(key == -1 || key == 0) {
-        return 0;
-    }
-    return 1;
+  fd_set fdset;
+  struct timeval timeout;
+  FD_ZERO( &fdset ); 
+  FD_SET( 0, &fdset );
+  timeout.tv_sec = 0; 
+  timeout.tv_usec = 0;
+  //  std::cout << "selecting.." << std::ends;
+  int ret = select(0+1 , &fdset , NULL , NULL , &timeout );
+  //  std::cout << "selected(" << ret << ")" << std::endl;
+  return ret;
 #endif
 }
 
@@ -79,7 +83,7 @@ static int myGetch() {
 	return _getch();
 #else
     int keys[5] = {-1, -1, -1, -1, -1};
-    //int key = getchar();
+    int key = getchar();
 	switch(key) {
         case -1:
         case 0:

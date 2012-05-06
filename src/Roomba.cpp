@@ -10,28 +10,28 @@ using namespace net::ysuga::roomba;
 Roomba::Roomba(const char *portName, const int baudrate) :
 m_isStreamMode(0)
 {
-  std::cout << "Roomba::Roomba(" << portName << ", " << baudrate << ")" << std::endl;
-	m_MainBrushFlag = MOTOR_OFF;
-	m_SideBrushFlag = MOTOR_OFF;
-	m_VacuumFlag = MOTOR_OFF;
-
-	
-	m_ledFlag = m_intensity = m_color = 0;
-
-	m_pTransport = new Transport(portName, baudrate);
-	start();
+  m_MainBrushFlag = MOTOR_OFF;
+  m_SideBrushFlag = MOTOR_OFF;
+  m_VacuumFlag = MOTOR_OFF;
+  
+  
+  m_ledFlag = m_intensity = m_color = 0;
+  
+  m_pTransport = new Transport(portName, baudrate);
+  start();
 }
 
 
 Roomba::~Roomba(void)
 {
-	if(m_isStreamMode) {
-		m_isStreamMode = false;
-		Join();
-		suspendSensorStream();
-	}
-	setMode(MODE_POWER_DOWN);
-	delete m_pTransport;
+  if(m_isStreamMode) {
+    suspendSensorStream();
+    m_isStreamMode = false;
+    Join();
+  }
+  safeControl();
+  start();
+  delete m_pTransport;
 }
 
 void Roomba::setMode(Mode mode)
@@ -60,7 +60,6 @@ void Roomba::setMode(Mode mode)
 	case MODE_NORMAL_CLEAN:
 		m_pTransport->SendPacket(OP_CLEAN);
 		m_CurrentMode = MODE_PASSIVE;
-
 		break;
 
 	case MODE_MAX_TIME_CLEAN:
@@ -208,6 +207,10 @@ void Roomba::startSensorStream(unsigned char* requestingSensors, int numSensors)
 	m_isStreamMode = true;
 	resumeSensorStream();
 	Start();
+
+	getRightEncoderCounts();
+	getLeftEncoderCounts();
+
 	delete buffer;
 }
 
