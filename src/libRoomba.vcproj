@@ -228,6 +228,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\include\Odometry.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\op_code.h"
 				>
 			</File>

@@ -17,6 +17,8 @@
 #include "Thread.h"
 #include <RoombaException.h>
 
+#include "Odometry.h"
+
 #include <map>
 
 namespace net {
@@ -30,6 +32,18 @@ namespace net {
 			class Roomba : public Thread
 			{
 			private:
+
+				unsigned int m_Version;
+			public:
+				enum Version {
+					VERSION_ROI, // http://media.wiley.com/product_ancillary/17/04700727/DOWNLOAD/iRobot%20Roomba%20Open%20Interface%20Specification.pdf
+					VERSION_500_SERIES, // http://www.irobot.lv/uploaded_files/File/iRobot_Roomba_500_Open_Interface_Spec.pdf
+				};
+			public:
+				enum Model {
+					MODEL_CREATE,
+					MODEL_500SERIES,
+				};
 
 
 			public:
@@ -158,10 +172,11 @@ namespace net {
 				/**
 				 * @brief Constructor
 				 *
+				 * @param model    Model Number of Roomba. (MODEL_CREATE or MODEL_500)
 				 * @param portName Port Name that Roomba is connected (e.g., "\\\\.\\COM4", "/dev/ttyUSB0")
 				 * @param baudrate Baud Rate. Default 115200.
 				 */
-				LIBROOMBA_API Roomba(const char *portName, const int baudrate = 115200);
+				LIBROOMBA_API Roomba(const int model, const char *portName, const int baudrate = 115200);
 
 				/**
 				 * @brief Destructor

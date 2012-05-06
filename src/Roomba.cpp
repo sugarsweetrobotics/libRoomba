@@ -7,14 +7,19 @@
 
 using namespace net::ysuga::roomba;
 
-Roomba::Roomba(const char *portName, const int baudrate) :
+Roomba::Roomba(const int model, const char *portName, const int baudrate) :
 m_isStreamMode(0)
 {
   m_MainBrushFlag = MOTOR_OFF;
   m_SideBrushFlag = MOTOR_OFF;
   m_VacuumFlag = MOTOR_OFF;
   
-  
+  if(model == MODEL_CREATE) {
+	  m_Version = VERSION_ROI;
+  } else {
+	  m_Version = VERSION_500_SERIES;
+  }
+
   m_ledFlag = m_intensity = m_color = 0;
   
   m_pTransport = new Transport(portName, baudrate);

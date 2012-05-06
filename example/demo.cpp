@@ -16,6 +16,8 @@ int main(const int argc, const char* argv[]) {
   int baudrate = 115200;
   if(argc == 1) {
     usage();
+	std::cout << "Press enter key to exit" << std::endl;
+	getchar();
     return 0;
   } else if (argc == 3) {
     baudrate = atoi(argv[2]);
@@ -23,10 +25,8 @@ int main(const int argc, const char* argv[]) {
 	try {
 		bool endflag = false;
 
-		std::cout << "init scr ok" << std::endl;
-		Roomba roomba(argv[1], baudrate);
+		Roomba roomba(Roomba::MODEL_500SERIES, argv[1], baudrate);
 		init_scr();
-		std::cout << "construct ok" << std::endl;
 		roomba.safeControl();
 		roomba.runAsync();
 		short color = 0;
