@@ -13,15 +13,20 @@ void usage() {
 
 
 int main(const int argc, const char* argv[]) {
-  if(argc != 2) {
+  int baudrate = 115200;
+  if(argc == 1) {
     usage();
     return 0;
+  } else if (argc == 3) {
+    baudrate = atoi(argv[2]);
   }
 	try {
 		bool endflag = false;
+
+		std::cout << "init scr ok" << std::endl;
+		Roomba roomba(argv[1], baudrate);
 		init_scr();
-		Roomba roomba(argv[1]);
-		
+		std::cout << "construct ok" << std::endl;
 		roomba.safeControl();
 		roomba.runAsync();
 		short color = 0;

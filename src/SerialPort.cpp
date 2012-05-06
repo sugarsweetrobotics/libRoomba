@@ -27,6 +27,7 @@
 
 #endif
 
+#include <iostream>
 #include "SerialPort.h"
 
 /* Header includeing division
@@ -39,7 +40,7 @@ using namespace net::ysuga;
  */
 SerialPort::SerialPort(const char* filename, const int baudrate)
 {
-
+  std::cout << "SerialPort::SerialPort(" << filename << ", " << baudrate << ")" << std::endl;
 #ifdef WIN32
 	DCB dcb;
 	m_hComm = 0;
@@ -79,12 +80,13 @@ SerialPort::SerialPort(const char* filename, const int baudrate)
 #else
   if((m_Fd = open(filename, O_RDWR /*| O_NOCTTY |O_NONBLOCK*/)) < 0) {
       throw ComOpenException();
-    }
+  }
+  std::cout << "fopen ok" << std::endl;
     struct termios tio;
-	memset(&tio, 0, sizeof(tio));
-	cfsetspeed(&tio, baudrate);
-	tio.c_cflag |= CS8 | CLOCAL | CREAD;
-	tcsetattr(m_Fd, TCSANOW, &tio);
+    memset(&tio, 0, sizeof(tio));
+    cfsetspeed(&tio, baudrate);
+    tio.c_cflag |= CS8 | CLOCAL | CREAD;
+    tcsetattr(m_Fd, TCSANOW, &tio);
 #endif
 }
 

@@ -28,6 +28,18 @@ static void init_scr() {
 #ifdef WIN32
 	system("cls");
 #else
+  	struct termios myTermios;
+	tcgetattr(fileno(stdin), &m_oldTermios);
+	tcgetattr(fileno(stdin), &myTermios);
+    
+	myTermios.c_cc[VTIME] = 0;
+#ifdef linux
+	myTermios.c_cc[VMIN] = 0;
+#else // MacOS
+	myTermios.c_cc[VMIN] = 1;
+#endif
+	myTermios.c_lflag &= (~ECHO & ~ICANON);
+	tcsetattr(fileno(stdin), TCSANOW, &myTermios);
         
 #endif
 }
@@ -44,30 +56,20 @@ static void exit_scr() {
 #ifdef WIN32
 	system("cls");
 #else
-  	struct termios myTermios;
-	tcgetattr(fileno(stdin), &m_oldTermios);
-	tcgetattr(fileno(stdin), &myTermios);
-    
-	myTermios.c_cc[VTIME] = 0;
-#ifdef linux
-	myTermios.c_cc[VMIN] = 0;
-#else // MacOS
-	myTermios.c_cc[VMIN] = 1;
-#endif
-	myTermios.c_lflag &= (~ECHO & ~ICANON);
-	tcsetattr(fileno(stdin), TCSANOW, &myTermios);
 #endif
 }
+
+ static int key;
 
 static int myKbhit() {
 #ifdef WIN32
 	return _kbhit();
 #else
-    int key = getchar();
+    key = getchar();
     if(key == -1 || key == 0) {
-        return 1;
+        return 0;
     }
-    return 0;
+    return 1;
 #endif
 }
 
@@ -77,7 +79,7 @@ static int myGetch() {
 	return _getch();
 #else
     int keys[5] = {-1, -1, -1, -1, -1};
-	int key = getchar();
+    //int key = getchar();
 	switch(key) {
         case -1:
         case 0:

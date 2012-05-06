@@ -10,6 +10,7 @@ using namespace net::ysuga::roomba;
 Roomba::Roomba(const char *portName, const int baudrate) :
 m_isStreamMode(0)
 {
+  std::cout << "Roomba::Roomba(" << portName << ", " << baudrate << ")" << std::endl;
 	m_MainBrushFlag = MOTOR_OFF;
 	m_SideBrushFlag = MOTOR_OFF;
 	m_VacuumFlag = MOTOR_OFF;
