@@ -17,6 +17,7 @@
 #include "Thread.h"
 #include <RoombaException.h>
 
+#include "type.h"
 #include "Odometry.h"
 
 #include <map>
@@ -33,7 +34,7 @@ namespace net {
 			{
 			private:
 
-				unsigned int m_Version;
+				uint32_t m_Version;
 			public:
 				enum Version {
 					VERSION_ROI, // http://media.wiley.com/product_ancillary/17/04700727/DOWNLOAD/iRobot%20Roomba%20Open%20Interface%20Specification.pdf
@@ -176,7 +177,7 @@ namespace net {
 				 * @param portName Port Name that Roomba is connected (e.g., "\\\\.\\COM4", "/dev/ttyUSB0")
 				 * @param baudrate Baud Rate. Default 115200.
 				 */
-				LIBROOMBA_API Roomba(const int model, const char *portName, const int baudrate = 115200);
+				LIBROOMBA_API Roomba(const uint32_t model, const char *portName, const uint32_t baudrate = 115200);
 
 				/**
 				 * @brief Destructor
@@ -184,9 +185,19 @@ namespace net {
 				LIBROOMBA_API virtual ~Roomba(void);
 
 
+			private:
+				void getSensorValue(unsigned char sensorId, uint16_t* value);
+				void getSensorValue(unsigned char sensorId, int16_t* value);
+				void getSensorValue(unsigned char sensorId, uint8_t* value);
+				void getSensorValue(unsigned char sensorId, int8_t* value);
+
+				
+				void handleBasicData();
+				void handleStreamData();
+				unsigned char* buffer;
+	
+
 			public:
-
-
 
 				/** 
 				 * @brief Set Roomba's mode 
@@ -292,7 +303,7 @@ namespace net {
 				 * @param turnRadius Radius (-2000 – 2000 mm) (negative => CCW)
 				 * @throw PreconditionNotMetError
 				 */
-				LIBROOMBA_API void drive(unsigned short translation, unsigned short turnRadius);
+				LIBROOMBA_API void drive(uint16_t translation, uint16_t turnRadius);
 
 
 				/**
@@ -302,7 +313,7 @@ namespace net {
 				 * @param leftWheel  Translation Velocity (-500 - 500 mm/s)
 				 * @throw PreconditionNotMetError
 				 */
-				LIBROOMBA_API void driveDirect(short rightWheel, short leftWheel);
+				LIBROOMBA_API void driveDirect(int16_t rightWheel, int16_t leftWheel);
 
 				/**
 				 * @brief Drive Each Wheel with PWM
@@ -311,7 +322,7 @@ namespace net {
 				 * @param leftWheel  Translation Velocity (-255 - +255)
 				 * @throw PreconditionNotMetError
 				 */
-				LIBROOMBA_API void drivePWM(unsigned short rightWheel, unsigned short leftWheel);
+				LIBROOMBA_API void drivePWM(int16_t rightWheel, int16_t leftWheel);
 
 				
 				/**
@@ -386,9 +397,9 @@ namespace net {
 				 * @param intensity intensity of the leds. (0-255)
 				 * @param color color of the CLEAN/POWER button (0-green, 255-red).
 				 */
-				LIBROOMBA_API void setLED(unsigned char leds, unsigned char intensity, unsigned char color = 127);
+				LIBROOMBA_API void setLED(uint8_t leds, uint8_t intensity, uint8_t color = 127);
 
-				LIBROOMBA_API void setDockLED(int flag) {
+				LIBROOMBA_API void setDockLED(uint8_t flag) {
 					if(flag) {
 						m_ledFlag |= LED_DOCK;
 					} else {
@@ -397,7 +408,7 @@ namespace net {
 					setLED(m_ledFlag, m_intensity, m_color);
 				}
 
-				LIBROOMBA_API void setSpotLED(int flag) {
+				LIBROOMBA_API void setSpotLED(uint8_t flag) {
 					if(flag) {
 						m_ledFlag |= LED_SPOT;
 					} else {
@@ -406,7 +417,7 @@ namespace net {
 					setLED(m_ledFlag, m_intensity, m_color);
 				}
 
-				LIBROOMBA_API void setDebrisLED(int flag) {
+				LIBROOMBA_API void setDebrisLED(uint8_t flag) {
 					if(flag) {
 						m_ledFlag |= LED_DEBRIS;
 					} else {
@@ -415,7 +426,7 @@ namespace net {
 					setLED(m_ledFlag, m_intensity, m_color);
 				}
 
-				LIBROOMBA_API void setRobotLED(int flag) {
+				LIBROOMBA_API void setRobotLED(uint8_t flag) {
 					if(flag) {
 						m_ledFlag |= LED_CHECK_ROBOT;
 					} else {
@@ -425,12 +436,12 @@ namespace net {
 				}
 
 
-				LIBROOMBA_API void setCleanLEDIntensity(unsigned char intensity) {
+				LIBROOMBA_API void setCleanLEDIntensity(uint8_t intensity) {
 					m_intensity = intensity;
 					setLED(m_ledFlag, m_intensity, m_color);
 				}
 
-				LIBROOMBA_API void setCleanLEDColor(unsigned char color) {
+				LIBROOMBA_API void setCleanLEDColor(uint8_t color) {
 					m_color = color;
 					setLED(m_ledFlag, m_intensity, m_color);
 				}
@@ -443,7 +454,7 @@ namespace net {
 
 				std::map<SensorID, unsigned short> m_SensorDataMap;
 
-				unsigned long m_AsyncThreadReceiveCounter;
+				uint32_t m_AsyncThreadReceiveCounter;
 				void waitPacketReceived();
 			public:
 				/**
@@ -478,10 +489,10 @@ namespace net {
 				LIBROOMBA_API void runAsync();
 
 			private:
-				void RequestSensor(unsigned char sensorId, short *value)  ;
-				void RequestSensor(unsigned char sensorId, unsigned short *value);
-				void RequestSensor(unsigned char sensorId, char *value);
-				void RequestSensor(unsigned char sensorId, unsigned char *value);
+				void RequestSensor(uint8_t sensorId, int16_t *value)  ;
+				void RequestSensor(uint8_t sensorId, uint16_t *value);
+				void RequestSensor(uint8_t sensorId, int8_t *value);
+				void RequestSensor(uint8_t sensorId, uint8_t *value);
 
 			public:
 
@@ -490,63 +501,63 @@ namespace net {
 				 *
 				 * @return true if dropped. false if not dropped.
 				 */
-				LIBROOMBA_API int isRightWheelDropped();
+				LIBROOMBA_API bool isRightWheelDropped();
 
 				/**
 				 * @brief Is Left Wheel Dropped ?
 				 *
 				 * @return true if dropped. false if not dropped.
 				 */
-				LIBROOMBA_API int isLeftWheelDropped();
+				LIBROOMBA_API bool isLeftWheelDropped();
 
 				/**
 				 * @brief Is Right Bump ?
 				 *
 				 * @return true if bumped. false if not bumped.
 				 */
-				LIBROOMBA_API int isRightBump();
+				LIBROOMBA_API bool isRightBump();
 
 				/**
 				 * @brief Is Left Bump ?
 				 *
 				 * @return true if bumped. false if not bumped.
 				 */
-				LIBROOMBA_API int isLeftBump();
+				LIBROOMBA_API bool isLeftBump();
 
 				/**
 				 * @brief Is Left Cliff ?
 				 *
 				 * @return true if cliff. false if not cliff.
 				 */
-				LIBROOMBA_API int isCliffLeft();
+				LIBROOMBA_API bool isCliffLeft();
 
 				/**
 				 * @brief Is Front Left Cliff ?
 				 *
 				 * @return true if cliff. false if not cliff.
 				 */
-				LIBROOMBA_API int isCliffFrontLeft();
+				LIBROOMBA_API bool isCliffFrontLeft();
 
 				/**
 				 * @brief Is Front Right Cliff ?
 				 *
 				 * @return true if cliff. false if not cliff.
 				 */
-				LIBROOMBA_API int isCliffFrontRight();
+				LIBROOMBA_API bool isCliffFrontRight();
 
 				/**
 				 * @brief Is Right Cliff ?
 				 *
 				 * @return true if cliff. false if not cliff.
 				 */
-				LIBROOMBA_API int isCliffRight();
+				LIBROOMBA_API bool isCliffRight();
 
 				/**
 				 * @brief Is Virtual Wall deteceted?
 				 *
 				 * @return true if virtual wall detected.
 				 */
-				LIBROOMBA_API int isVirtualWall();
+				LIBROOMBA_API bool isVirtualWall();
 
 				/** 
 				 * @brief Wheel OverCurrent?
@@ -563,35 +574,35 @@ namespace net {
 				 *
 				 * @return true if overcurrent
 				 */
-				LIBROOMBA_API int isRightWheelOvercurrent();
+				LIBROOMBA_API bool isRightWheelOvercurrent();
 
 				/**
 				 * @brief Is Left Wheel Over Current?
 				 *
 				 * @return true if overcurrent
 				 */
-				LIBROOMBA_API int isLeftWheelOvercurrent();
+				LIBROOMBA_API bool isLeftWheelOvercurrent();
 
 				/**
 				 * @brief Is Main Brush Over Current?
 				 *
 				 * @return true if overcurrent
 				 */
-				LIBROOMBA_API int isMainBrushOvercurrent();
+				LIBROOMBA_API bool isMainBrushOvercurrent();
 
 				/**
 				 * @brief Is Side Brush Over Current?
 				 *
 				 * @return true if overcurrent
 				 */
-				LIBROOMBA_API int isSideBrushOvercurrent();
+				LIBROOMBA_API bool isSideBrushOvercurrent();
 
 				/**
 				 * @brief Detect Dirt
 				 *
 				 * @return 0-255
 				 */
-				LIBROOMBA_API int dirtDetect();
+				LIBROOMBA_API bool dirtDetect();
 
 				/**
 				 * @brief Get 8-bit IR character received by Roomba's omnidirectional IR receiver.
@@ -599,7 +610,7 @@ namespace net {
 				 * @return received character. value 0 indicates no character received.
 				 * 
 				 */
-				LIBROOMBA_API char getInfraredCharacterOmni();
+				LIBROOMBA_API int8_t getInfraredCharacterOmni();
 
 				/**
 				 * @brief Get 8-bit IR character received by Roomba's right IR receiver.
@@ -607,7 +618,7 @@ namespace net {
 				 * @return received character. value 0 indicates no character received.
 				 * 
 				 */
-				LIBROOMBA_API char getInfraredCharacterRight();
+				LIBROOMBA_API int8_t getInfraredCharacterRight();
 
 				/**
 				 * @brief Get 8-bit IR character received by Roomba's left IR receiver.
@@ -615,7 +626,7 @@ namespace net {
 				 * @return received character. value 0 indicates no character received.
 				 * 
 				 */
-				LIBROOMBA_API char getInfraredCharacterLeft();
+				LIBROOMBA_API int8_t getInfraredCharacterLeft();
 
 
 				/**
@@ -633,14 +644,14 @@ namespace net {
 				 *
 				 * @return distance in millimeters
 				 */
-				LIBROOMBA_API int getDistance();
+				LIBROOMBA_API int16_t getDistance();
 
 				/**
 				 * @brief Get Traveled Angle since this function previously called.
 				 *
 				 * @return angle in degrees
 				 */
-				LIBROOMBA_API int getAngle();
+				LIBROOMBA_API int16_t getAngle();
 
 				/**
 				 * @brief Get Charging State
@@ -657,21 +668,21 @@ namespace net {
 				 *
 				 * @return voltage in milli volt
 				 */
-				LIBROOMBA_API int getVoltage();
+				LIBROOMBA_API uint16_t getVoltage();
 
 				/**
 				 * @brief Get Current
 				 *
 				 * @return current in milli amps (mA)
 				 */
-				LIBROOMBA_API int getCurrent();
+				LIBROOMBA_API uint16_t getCurrent();
 
 				/** 
 				 * @brief Get Temperature of Roomba
 				 *
 				 * @return temperature (cercius)
 				 */
-				LIBROOMBA_API int getTemperature();
+				LIBROOMBA_API int8_t getTemperature();
 
 
 
@@ -704,14 +715,14 @@ namespace net {
 				 *
 				 * @return requested translational velocity (mm/s)
 				 */
-				LIBROOMBA_API int getRequestedVelocity();
+				LIBROOMBA_API int16_t getRequestedVelocity();
 
 				/**
 				 * @brief Get Requested Translational Radius
 				 *
 				 * @return requested translational radius (mm)
 				 */
-				LIBROOMBA_API int getRequestedRadius();
+				LIBROOMBA_API int16_t getRequestedRadius();
 
 
 				/**
@@ -719,14 +730,14 @@ namespace net {
 				 *
 				 * @return Encoder Count (0-65535)
 				 */
-				LIBROOMBA_API unsigned short getRightEncoderCounts();
+				LIBROOMBA_API uint16_t getRightEncoderCounts();
 
 				/**
 				 * @brief Get Left Wheel's Encoder Count
 				 *
 				 * @return Encoder Count (0-65535)
 				 */
-				LIBROOMBA_API unsigned short getLeftEncoderCounts();
+				LIBROOMBA_API uint16_t getLeftEncoderCounts();
 			};
 
 		}

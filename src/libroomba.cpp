@@ -11,7 +11,7 @@ static int g_RoombaCounter;
 static Roomba* g_pRoomba[MAX_ROOMBA] = {NULL, };
 
 
-LIBROOMBA_API int Roomba_create(const int model, const char* portname, const int baudrate)
+LIBROOMBA_API int Roomba_create(const uint32_t model, const char* portname, const uint32_t baudrate)
 {
 	g_pRoomba[g_RoombaCounter] = new Roomba(model, portname, baudrate);
 	g_RoombaCounter++;
