@@ -35,6 +35,15 @@ namespace net {
 			private:
 
 				uint32_t m_Version;
+
+				double m_X;
+				double m_Y;
+				double m_Th;
+
+				bool m_EncoderInitFlag;
+				int32_t m_EncoderRightOld;
+				int32_t m_EncoderLeftOld;
+
 			public:
 				enum Version {
 					VERSION_ROI, // http://media.wiley.com/product_ancillary/17/04700727/DOWNLOAD/iRobot%20Roomba%20Open%20Interface%20Specification.pdf
@@ -46,8 +55,13 @@ namespace net {
 					MODEL_500SERIES,
 				};
 
-
+				double getX() const {return m_X;}
+				double getY() const {return m_Y;}
+				double getTh() const { return m_Th;}
 			public:
+
+				
+				void getSensorGroup2(uint8_t *remoteOpcode, uint8_t *buttons, int16_t *distance, int16_t *angle);
 
 				/*
 				 * THESE ENUMS MUST BE SAME AS THE ENUMS DEFINED IN COMMON.H FILE.
@@ -377,9 +391,9 @@ namespace net {
 				}
 
 			private:
-				unsigned char m_ledFlag;
-				unsigned char m_intensity;
-				unsigned char m_color;
+				uint8_t m_ledFlag;
+				uint8_t m_intensity;
+				uint8_t m_color;
 			public:
 				/**
 				 * @brief Set LEDs on Roomba
@@ -450,12 +464,16 @@ namespace net {
 			private:
 				Mutex m_AsyncThreadMutex;
 
-				int m_isStreamMode;
+				bool m_isStreamMode;
 
-				std::map<SensorID, unsigned short> m_SensorDataMap;
+				std::map<SensorID, uint16_t> m_SensorDataMap;
 
 				uint32_t m_AsyncThreadReceiveCounter;
+
+
 				void waitPacketReceived();
+
+				void processOdometry(void);
 			public:
 				/**
 				 * @brief Start Sensor Data Stream Receiving.
@@ -466,7 +484,7 @@ namespace net {
 				 * @param requestingSensors array that includes sensorIds
 				 * @param numSensors The numbers of sensors which are listed in the previous argument.
 				 */
-				void startSensorStream(unsigned char* requestingSensors, int numSensors);
+				void startSensorStream(uint8_t* requestingSensors, uint32_t numSensors);
 
 				/**
 				 * @brief Resume Sensor Data Stream

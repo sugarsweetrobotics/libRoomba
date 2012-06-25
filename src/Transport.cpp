@@ -3,7 +3,7 @@
 using namespace net::ysuga;
 using namespace net::ysuga::roomba;
 
-Transport::Transport(const char* portName, const int baudrate)
+Transport::Transport(const char* portName, const uint16_t baudrate)
 {
 	m_pSerialPort = new SerialPort(portName, baudrate);
 }
@@ -14,11 +14,11 @@ Transport::~Transport(void)
 	delete m_pSerialPort;
 }
 
-int Transport::SendPacket(unsigned char opCode, 
-						  const unsigned char *dataBytes /*= NULL*/,
-						  const unsigned int dataSize /*= 0*/)
+int32_t Transport::SendPacket(uint8_t opCode, 
+						  const uint8_t *dataBytes /*= NULL*/,
+						  const uint32_t dataSize /*= 0*/)
 {
-	unsigned char* buffer = new unsigned char[dataSize + 1];
+	uint8_t* buffer = new uint8_t[dataSize + 1];
 	buffer[0] = opCode;
 	for(unsigned int i = 1;i < dataSize + 1;i++) {
 		buffer[i] = dataBytes[i-1];
@@ -29,11 +29,11 @@ int Transport::SendPacket(unsigned char opCode,
 }
 
 
-int Transport::ReceiveData(unsigned char *buffer, unsigned int requestSize, unsigned int* readBytes)
+int32_t Transport::ReceiveData(uint8_t *buffer, uint32_t requestSize, uint32_t* readBytes)
 {
-	unsigned char* data = new unsigned char[requestSize];
-	while ((unsigned int)m_pSerialPort->GetSizeInRxBuffer() <= requestSize) {
-		
+	uint8_t* data = new uint8_t[requestSize];
+	while ((uint32_t)m_pSerialPort->GetSizeInRxBuffer() < requestSize) {
+		Sleep(100);
 	}
 
 	*readBytes = m_pSerialPort->Read(buffer, requestSize);

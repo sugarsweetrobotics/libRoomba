@@ -8,12 +8,10 @@
 using namespace net::ysuga::roomba;
 
 Roomba::Roomba(const uint32_t model, const char *portName, const uint32_t baudrate) :
-m_isStreamMode(0)
+m_isStreamMode(0), 
+m_X(0), m_Y(0), m_Th(0), m_EncoderInitFlag(0),
+m_MainBrushFlag(MOTOR_OFF), m_SideBrushFlag(MOTOR_OFF), m_VacuumFlag(MOTOR_OFF)
 {
-  m_MainBrushFlag = MOTOR_OFF;
-  m_SideBrushFlag = MOTOR_OFF;
-  m_VacuumFlag = MOTOR_OFF;
-  
   if(model == MODEL_CREATE) {
 	  m_Version = VERSION_ROI;
   } else {
@@ -200,25 +198,31 @@ void Roomba::setLED(uint8_t leds, uint8_t intensity, uint8_t color /* = 127*/)
 
 
 				
-void Roomba::startSensorStream(uint8_t* requestingSensors, int32_t numSensors)
+void Roomba::startSensorStream(uint8_t* requestingSensors, uint32_t numSensors)
 {
 	m_SensorDataMap.clear();
-	uint8_t* buffer = new uint8_t[numSensors + 1];
-	buffer[0] = numSensors;
-	for(int i = 0;i < numSensors;i++) {
-		m_SensorDataMap[(SensorID)requestingSensors[i]] = 0;
-		buffer[i+1] = requestingSensors[i];
+
+	if(m_Version == Roomba::VERSION_500_SERIES) {
+		uint8_t* buffer = new uint8_t[numSensors + 1];
+		buffer[0] = numSensors;
+		for(unsigned int i = 0;i < numSensors;i++) {
+			m_SensorDataMap[(SensorID)requestingSensors[i]] = 0;
+			buffer[i+1] = requestingSensors[i];
+		}
+		m_pTransport->SendPacket(OP_STREAM, buffer, numSensors+1);
+		
+		m_isStreamMode = true;
+		resumeSensorStream();
+		Start();
+
+		getRightEncoderCounts();
+		getLeftEncoderCounts();
+
+		delete buffer;
+	} else {
+		m_isStreamMode = true;
+		Start();
 	}
-	m_pTransport->SendPacket(OP_STREAM, buffer, numSensors+1);
-	
-	m_isStreamMode = true;
-	resumeSensorStream();
-	Start();
-
-	getRightEncoderCounts();
-	getLeftEncoderCounts();
-
-	delete buffer;
 }
 
 void Roomba::resumeSensorStream()
@@ -237,6 +241,31 @@ void Roomba::suspendSensorStream()
 	}
 }
 
+
+void Roomba::getSensorGroup2(uint8_t *remoteOpcode, uint8_t *buttons, int16_t *distance, int16_t *angle)
+{
+	uint8_t data[6];
+	uint32_t readBytes;
+	uint8_t sensorId = 2;
+	m_AsyncThreadMutex.Lock();
+	m_pTransport->SendPacket(OP_SENSORS, &sensorId, 1);
+	m_pTransport->ReceiveData(data, 6, &readBytes);
+	m_AsyncThreadMutex.Unlock();
+	*remoteOpcode = data[0];
+	*buttons = data[1];
+	*distance = *angle = 0;
+#ifdef __BIG_ENDIAN__
+	*distance = ((uint16_t)data[2] << 8) | (data[3] & 0xFF);
+	*angle    = ((uint16_t)data[4] << 8) | (data[5] & 0xFF);
+#else
+	*distance |= ((uint16_t)data[2] << 8) | ((uint16_t)data[3] & 0xFF);
+	*angle    |= ((uint16_t)data[4] << 8) | ((uint16_t)data[5] & 0xFF);
+#endif
+	std::cout << "D=" << *distance << " A=" << *angle << std::endl;
+}
+
+
+
 void Roomba::getSensorValue(uint8_t sensorId, uint16_t *value) {
 	uint8_t data[2];
 	uint32_t readBytes;
@@ -245,9 +274,9 @@ void Roomba::getSensorValue(uint8_t sensorId, uint16_t *value) {
 	m_pTransport->ReceiveData(data, 2, &readBytes);
 	m_AsyncThreadMutex.Unlock();
 #ifdef __BIG_ENDIAN__
-	*value = ((int16_t)data[0] << 8) | (data[1] & 0xFF);
+	*value = ((uint16_t)data[0] << 8) | (data[1] & 0xFF);
 #else
-	*value = ((int16_t)data[1] << 8) | (data[0] & 0xFF);
+	*value = ((uint16_t)data[1] << 8) | (data[0] & 0xFF);
 #endif
 }
 
@@ -390,16 +419,16 @@ void Roomba::handleStreamData() {
 		case RIGHT_MOTOR_CURRENT:
 		case MAIN_BRUSH_MOTOR_CURRENT:
 		case SIDE_BRUSH_MOTOR_CURRENT:
-#ifdef BIG_ENDIAN
+#ifdef __BIG_ENDIAN__
 			dataBuf |= buffer[counter];
 			counter++;
 			dataBuf <<= 8;
 			dataBuf |= buffer[counter];
 			counter++;
 #else
-			dataBuf |= buffer[counter];
-			counter++;
 			dataBuf |= ((uint16_t)buffer[counter] << 8);
+			counter++;
+			dataBuf |= buffer[counter];
 			counter++;
 #endif
 			m_AsyncThreadMutex.Lock();
@@ -410,30 +439,25 @@ void Roomba::handleStreamData() {
 			break;
 		}
 	} while(counter < header[1]-1);
-
- 
-
-
 }
 
 
 void Roomba::handleBasicData()
 {
-	int16_t value;
-	getSensorValue(ANGLE, &value);
-	m_SensorDataMap[ANGLE] = value;
-		
-	getSensorValue(DISTANCE, &value);
-	m_SensorDataMap[DISTANCE] = value;
+	uint8_t opcode, buttons;
+	uint16_t distance, angle;
+	getSensorGroup2(&opcode, &buttons, (int16_t*)&distance, (int16_t*)&angle);
+	m_SensorDataMap[ANGLE] = angle;
+	m_SensorDataMap[DISTANCE] = distance;
 
 	m_AsyncThreadReceiveCounter++;
 }
+
 
 void Roomba::Run()
 {
 
 	m_AsyncThreadReceiveCounter = 0;
-
 
 	while(m_isStreamMode) {
 		if(m_Version != Roomba::VERSION_500_SERIES) {
@@ -441,9 +465,71 @@ void Roomba::Run()
 		} else {
 			handleStreamData();
 		}
+
+		processOdometry();
+		//Sleep(10);
 	}
+
 	std::cout << "Exiting Sensor Stream" << std::endl;
 	delete buffer;
+}
+
+void Roomba::processOdometry(void)
+{
+	double lengthOfShaft = 0.235;
+	double distance;
+	double angle;
+	if(m_Version == Roomba::MODEL_500SERIES) {
+
+		if(!m_EncoderInitFlag) {
+			m_EncoderInitFlag = true;
+			m_EncoderRightOld = getRightEncoderCounts();
+			m_EncoderLeftOld  = getLeftEncoderCounts();
+			return;
+		}
+
+		int32_t encoderRight = getRightEncoderCounts();
+		int32_t encoderLeft  = getLeftEncoderCounts();
+
+		int32_t dR = encoderRight - m_EncoderRightOld;
+		int32_t dL = encoderLeft  - m_EncoderLeftOld;
+
+		
+#define PULSES_TO_METER 0.000445558279992234
+
+
+		if(dR > 32767) {
+			dR -= 65535;
+		} else if (dR < -32768) {
+			dR += 65535;
+		}
+
+		if(dL > 32767) {
+			dL -= 65535;
+		} else if (dL < -32768) {
+			dL += 65535;
+		}
+		
+		distance = (dR + dL) * PULSES_TO_METER / 2 ;
+		angle = (dR - dL) * PULSES_TO_METER / lengthOfShaft;
+
+		m_EncoderRightOld = encoderRight;
+		m_EncoderLeftOld = encoderLeft;
+	} else {
+		distance = getDistance();
+		angle = getAngle() * 2 / lengthOfShaft;
+		///angle = getAngle() / 180.0 * 3.1415926;
+	}
+	double dX = distance * cos( m_Th + angle/2 );
+	double dY = distance * sin( m_Th + angle/2 );
+	m_X += dX;
+	m_Y += dY;
+	m_Th += angle;
+	if(m_Th < -3.1415926536) {
+		m_Th += 3.1415926536 * 2;
+	} else if(m_Th > 3.1415896536) {
+		m_Th -= 3.1415926536 * 2;
+	}
 }
 
 void Roomba::waitPacketReceived() {
@@ -456,10 +542,16 @@ void Roomba::waitPacketReceived() {
 
 void Roomba::runAsync()
 {
+	if(m_Version == Roomba::VERSION_500_SERIES) {
 	uint8_t defaultSensorId[3] = {RIGHT_ENCODER_COUNTS,
 		LEFT_ENCODER_COUNTS, BUMPS_AND_WHEEL_DROPS};
+	//uint8_t defaultSensorId[3] = {DISTANCE, ANGLE, BUMPS_AND_WHEEL_DROPS};
+
 	uint8_t numSensor = 3;
 	this->startSensorStream(defaultSensorId, numSensor);
+	} else if(m_Version == Roomba::VERSION_ROI) {
+		this->startSensorStream(NULL, 0);
+	}
 }
 
 void Roomba::RequestSensor(uint8_t sensorId, uint16_t *value) 
@@ -474,29 +566,33 @@ void Roomba::RequestSensor(uint8_t sensorId, uint16_t *value)
 			m_AsyncThreadMutex.Unlock();
 			return;
 		} else {
-			m_SensorDataMap[(SensorID)sensorId] = 0;
-			m_AsyncThreadMutex.Unlock();
-			waitPacketReceived();
-			*value = 0;
-			m_AsyncThreadMutex.Lock();
-			*value |= m_SensorDataMap[(SensorID)sensorId];
-			m_AsyncThreadMutex.Unlock();
+			if(m_Version == Roomba::VERSION_500_SERIES) {
+				m_SensorDataMap[(SensorID)sensorId] = 0;
+				m_AsyncThreadMutex.Unlock();
+				waitPacketReceived();
+				*value = 0;
+				m_AsyncThreadMutex.Lock();
+				*value |= m_SensorDataMap[(SensorID)sensorId];
+				m_AsyncThreadMutex.Unlock();
+			} else {
+				*value = 0;
+			}
 			return;
 		}
 	}
 
+	/*
 	if(m_Version != Roomba::VERSION_500_SERIES) {
 		*value = 0;
 		return;
 	}
+	*/
 
 	getSensorValue(sensorId, value);
 }
 
-void Roomba::RequestSensor(uint8_t sensorId, short *value)
+void Roomba::RequestSensor(uint8_t sensorId, int16_t *value)
 {
-
-
 	if(m_isStreamMode) {
 		m_AsyncThreadMutex.Lock();
 		std::map<SensorID, uint16_t>::const_iterator it = m_SensorDataMap.find((SensorID)sensorId);
@@ -506,21 +602,27 @@ void Roomba::RequestSensor(uint8_t sensorId, short *value)
 			m_AsyncThreadMutex.Unlock();
 			return;
 		} else {
-			m_SensorDataMap[(SensorID)sensorId] = 0;
-			m_AsyncThreadMutex.Unlock();
-			waitPacketReceived();
-			*value = 0;
-			m_AsyncThreadMutex.Lock();
-			*value |= m_SensorDataMap[(SensorID)sensorId];
-			m_AsyncThreadMutex.Unlock();
+			if(m_Version == Roomba::MODEL_500SERIES) {
+				m_SensorDataMap[(SensorID)sensorId] = 0;
+				m_AsyncThreadMutex.Unlock();
+				waitPacketReceived();
+				*value = 0;
+				m_AsyncThreadMutex.Lock();
+				*value |= m_SensorDataMap[(SensorID)sensorId];
+				m_AsyncThreadMutex.Unlock();
+			} else {
+				*value = 0;
+			}
 			return;
 		}
 	}
 
+	/*
 	if(m_Version != Roomba::VERSION_500_SERIES) {
 		*value = 0;
 		return;
 	}
+	*/
 
 	getSensorValue(sensorId, value);
 }
@@ -538,22 +640,27 @@ void Roomba::RequestSensor(uint8_t sensorId, char *value)
 			m_AsyncThreadMutex.Unlock();
 			return;
 		} else {
-			m_SensorDataMap[(SensorID)sensorId] = 0;
-			m_AsyncThreadMutex.Unlock();
-			waitPacketReceived();
-			*value = 0;
-			m_AsyncThreadMutex.Lock();
-			*value |= m_SensorDataMap[(SensorID)sensorId];
-			m_AsyncThreadMutex.Unlock();
+			if(m_Version == Roomba::MODEL_500SERIES) {
+				m_SensorDataMap[(SensorID)sensorId] = 0;
+				m_AsyncThreadMutex.Unlock();
+				waitPacketReceived();
+				*value = 0;
+				m_AsyncThreadMutex.Lock();
+				*value |= m_SensorDataMap[(SensorID)sensorId];
+				m_AsyncThreadMutex.Unlock();
+			} else {
+				*value = 0;
+			}
 			return;
 		}
 	}
 
+	/*
 	if(m_Version != Roomba::VERSION_500_SERIES) {
 		*value = 0;
 		return;
 	}
-
+	*/
 
 	getSensorValue(sensorId, value);
 }
@@ -570,21 +677,27 @@ void Roomba::RequestSensor(uint8_t sensorId, uint8_t *value)
 			m_AsyncThreadMutex.Unlock();
 			return;
 		} else {
-			m_SensorDataMap[(SensorID)sensorId] = 0;
-			m_AsyncThreadMutex.Unlock();
-			waitPacketReceived();
-			*value = 0;
-			m_AsyncThreadMutex.Lock();
-			*value |= m_SensorDataMap[(SensorID)sensorId];
-			m_AsyncThreadMutex.Unlock();
+			if(m_Version == Roomba::MODEL_500SERIES) {
+				m_SensorDataMap[(SensorID)sensorId] = 0;
+				m_AsyncThreadMutex.Unlock();
+				waitPacketReceived();
+				*value = 0;
+				m_AsyncThreadMutex.Lock();
+				*value |= m_SensorDataMap[(SensorID)sensorId];
+				m_AsyncThreadMutex.Unlock();
+			} else {
+				*value = 0;
+			}
 			return;
 		}
 	}
 
+	/*
 	if(m_Version != Roomba::VERSION_500_SERIES) {
 		*value = 0;
 		return;
 	}
+	*/
 
 	getSensorValue(sensorId, value);
 }

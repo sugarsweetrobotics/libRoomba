@@ -236,6 +236,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\resource.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\Roomba.h"
 				>
 			</File>
@@ -249,6 +253,14 @@
 			</File>
 			<File
 				RelativePath="..\include\Thread.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\Timer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\TimeSpec.h"
 				>
 			</File>
 			<File
