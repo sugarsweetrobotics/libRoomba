@@ -1,4 +1,5 @@
 
+
 #include "Roomba.h"
 #include <iostream>
 
@@ -531,6 +532,34 @@ void Roomba::processOdometry(void)
 		m_Th -= 3.1415926536 * 2;
 	}
 }
+
+void Roomba::move(const double trans, const double rotate) 
+{
+	double lengthOfShaft = 0.235;
+	double distance;
+	double angle;
+	if(m_Version == Roomba::MODEL_500SERIES) {
+		
+#define PULSES_TO_METER 0.000445558279992234
+
+		double dR = trans + rotate * lengthOfShaft;
+		double dL = trans - rotate * lengthOfShaft;
+		if(dR < -1.0) dR = -1.0;
+		else if(dR > 1.0) dR = 1.0;
+		if(dL < -1.0) dL = -1.0;
+		else if(dL > 1.0) dL = 1.0;
+		Roomba::driveDirect(dR * 10000, dL * 10000);
+	} else {
+		double dR = trans + rotate * lengthOfShaft;
+		double dL = trans - rotate * lengthOfShaft;
+		if(dR < -1.0) dR = -1.0;
+		else if(dR > 1.0) dR = 1.0;
+		if(dL < -1.0) dL = -1.0;
+		else if(dL > 1.0) dL = 1.0;
+		Roomba::driveDirect(dR * 10000, dL * 10000);
+	}
+}
+
 
 void Roomba::waitPacketReceived() {
 	uint32_t buf = m_AsyncThreadReceiveCounter;

@@ -113,23 +113,28 @@ int main(const int argc, const char* argv[]) {
 
 
 				case 'u':
+					roomba.move(0.1, 0);
 					r_vel = 100;
 					l_vel = 100;
 					break;
 				case 'm':
 					r_vel = -100;
 					l_vel = -100;
+					roomba.move(-0.1, 0);
 					break;
 				case 'h':
 					r_vel = 100;
 					l_vel = -100;
+					roomba.move(0, 0.1);
 					break;
 				case 'k':
 					r_vel = -100;
 					l_vel = 100;
+					roomba.move(0, -0.1);
 					break;
 				case 'j':
 					r_vel = l_vel = 0;
+					roomba.move(0, 0);
 					break;
 
 				case 'w':
@@ -194,7 +199,7 @@ int main(const int argc, const char* argv[]) {
 				}
 				try {
 					if(roomba.getMode() == roomba.MODE_SAFE || roomba.getMode() == roomba.MODE_SAFE) {
-						roomba.driveDirect(r_vel, l_vel);
+						//roomba.driveDirect(r_vel, l_vel);
 					}
 				} catch (net::ysuga::roomba::PreconditionNotMetError &e) {
 					std::cout << "Precondition Not Met" << std::endl;

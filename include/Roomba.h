@@ -756,6 +756,10 @@ namespace net {
 				 * @return Encoder Count (0-65535)
 				 */
 				LIBROOMBA_API uint16_t getLeftEncoderCounts();
+
+
+				LIBROOMBA_API void move(const double trans, const double rotate);
+
 			};
 
 		}
