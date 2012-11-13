@@ -23,6 +23,11 @@ option(BUILD_DOCUMENTATION "Build the documentation" ON)
 option(BUILD_IDL "Build and install idl" ON)
 option(BUILD_SOURCES "Build and install sources" OFF)
 
+if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+   # Mac OS X specific code
+   SET(CMAKE_CXX_COMPILER "g++")
+endif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+
 option(STATIC_LIBS "Build static libraries" OFF)
 if(STATIC_LIBS)
     set(LIB_TYPE STATIC)
