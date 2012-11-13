@@ -238,7 +238,7 @@ void Roomba::Run()
 	m_AsyncThreadReceiveCounter = 0;
 
 	while(m_isStreamMode) {
-		//Thread::Sleep(10);
+		Thread::Sleep(10);
 		while(1) {
 			m_pTransport->ReceiveData(header, 1, &readBytes);
 			if(header[0] == 19) break;

@@ -19,7 +19,7 @@ class ComException : public std::exception {
   }
 
  public:
-  const char* what() throw() {
+  virtual const char* what() const throw() {
     return msg.c_str();
   }
 };
