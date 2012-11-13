@@ -16,6 +16,8 @@ int main(const int argc, const char* argv[]) {
   int baudrate = 115200;
   if(argc == 1) {
     usage();
+	std::cout << "Press enter key to exit" << std::endl;
+	getchar();
     return 0;
   } else if (argc == 3) {
     baudrate = atoi(argv[2]);
@@ -23,10 +25,9 @@ int main(const int argc, const char* argv[]) {
 	try {
 		bool endflag = false;
 
-		std::cout << "init scr ok" << std::endl;
-		Roomba roomba(argv[1], baudrate);
+		Roomba roomba(Roomba::MODEL_500SERIES, argv[1], baudrate);
+		//Roomba roomba(Roomba::MODEL_CREATE, argv[1], baudrate);
 		init_scr();
-		std::cout << "construct ok" << std::endl;
 		roomba.safeControl();
 		roomba.runAsync();
 		short color = 0;
@@ -46,12 +47,15 @@ int main(const int argc, const char* argv[]) {
 			std::cout << "s: off      d: off        f: off       h: left j: stop    k: right\n";
 			std::cout << "x: ccw      c: ccw        v: on                m: backward\n";
 			std::cout << "---------------------------------------------------------------\n";
-			std::cout << "Right:" << std::right << roomba.getRightEncoderCounts() << std::endl;
-			std::cout << "Left :" << std::right << roomba.getLeftEncoderCounts() << std::endl;
+			//std::cout << "Right Encoder:" << std::right << roomba.getRightEncoderCounts() << "\n";
+			//std::cout << "Left Encoder :" << std::right << roomba.getLeftEncoderCounts() << "\n";
+			std::cout << "X            :" << std::right << roomba.getX() << "\n";
+			std::cout << "Y            :" << std::right << roomba.getY() << "\n";
+			std::cout << "Th           :" << std::right << roomba.getTh() << "\n";
 			std::cout << "---------------------------------------------------------------\n";
-			std::cout << "Left  Bump:" << std::right << roomba.isLeftBump() << std::endl;
-			std::cout << "Right Bump:" << std::right << roomba.isRightBump() << std::endl;
-			std::cout << "q: quit\n";
+			//std::cout << "Left  Bump:" << std::right << roomba.isLeftBump() << "\n";
+			//std::cout << "Right Bump:" << std::right << roomba.isRightBump() << "\n";
+			std::cout << "q: quit" << std::endl;
 
 			short r_vel = 0;
 			short l_vel = 0;

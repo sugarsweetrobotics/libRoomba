@@ -28,6 +28,23 @@
 /// Definitions 
 
 /**
+ * @brief Version of Command Set of Roomba
+ */
+enum Version {
+	VERSION_ROI, // http://media.wiley.com/product_ancillary/17/04700727/DOWNLOAD/iRobot%20Roomba%20Open%20Interface%20Specification.pdf
+	VERSION_500_SERIES, // http://www.irobot.lv/uploaded_files/File/iRobot_Roomba_500_Open_Interface_Spec.pdf
+};
+
+/**
+ * @brief Model of Roomba.
+ */
+enum Model {
+	MODEL_CREATE,
+	MODEL_500SERIES,
+};
+
+
+/**
  * @brief Roomba's Modes.
  * 
  * Mainly Roomba has three modes, PASSIVE, SAFE, and FULL.

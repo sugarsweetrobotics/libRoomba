@@ -228,7 +228,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\include\Odometry.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\op_code.h"
+				>
+			</File>
+			<File
+				RelativePath=".\resource.h"
 				>
 			</File>
 			<File
@@ -245,6 +253,14 @@
 			</File>
 			<File
 				RelativePath="..\include\Thread.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\Timer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\TimeSpec.h"
 				>
 			</File>
 			<File

@@ -40,7 +40,6 @@ using namespace net::ysuga;
  */
 SerialPort::SerialPort(const char* filename, const int baudrate)
 {
-  std::cout << "SerialPort::SerialPort(" << filename << ", " << baudrate << ")" << std::endl;
 #ifdef WIN32
 	DCB dcb;
 	m_hComm = 0;

@@ -33,6 +33,9 @@ class Roomba:
 
         self.handle = self.lib.Roomba_create(portName, baudrate);
 
+	self.MODEL_CREATE = 0
+	self.MODEL_500SERIES = 1
+
         self.MODE_OFF = 90
         self.MODE_PASSIVE = 100
         self.MODE_SAFE = 101
@@ -198,7 +201,7 @@ class Roomba:
     """
     
 if __name__ == '__main__':
-    roomba = Roomba('\\\\.\\COM16', 115200);
+    roomba = Roomba(roomba.MODEL_500_SERIES, '\\\\.\\COM16', 115200);
     roomba.setMode(roomba.MODE_SAFE)
     roomba.setLED(roomba.LED_DOCK, 127, 127)
     roomba.setMode(roomba.MODE_DOCK)
