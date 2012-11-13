@@ -1,0 +1,51 @@
+// Roomba IDL
+
+module ysuga {
+
+	interface RoombaCommand {
+		/** 
+		 * Go to SAFE control mode
+		 */
+		void safeControl();
+
+		/** 
+		 * Go to FULL control mode
+		 */
+		void fullControl();
+
+		/** 
+		 * Go to CLEAN mode
+		 */
+		void clean();
+
+		/** 
+		 * Go to SPOT mode
+		 */
+		void spotClean();
+
+		/** 
+		 * Go to MAX mode
+		 */
+		void maxClean();
+
+		/** 
+		 * Go to DOCK mode
+		 */
+		void dock();
+
+		/** 
+		 * Main Brush ON/OFF
+		 */
+		void mainBrush(in boolean on_off);
+
+		/** 
+		 * Side Brush ON/OFF
+		 */
+		void sideBrush(in boolean on_off, in boolean ccw);
+
+		/** 
+		 * Vacuum ON/OFF
+		 */
+		void vacuum(in boolean on_off);
+	};
+};
