@@ -461,6 +461,7 @@ void Roomba::Run()
 	m_AsyncThreadReceiveCounter = 0;
 
 	while(m_isStreamMode) {
+	  Thread::Sleep(100);
 		if(m_Version != Roomba::VERSION_500_SERIES) {
 			handleBasicData();
 		} else {
@@ -468,7 +469,6 @@ void Roomba::Run()
 		}
 
 		processOdometry();
-		//Sleep(10);
 	}
 
 	std::cout << "Exiting Sensor Stream" << std::endl;
@@ -656,10 +656,8 @@ void Roomba::RequestSensor(uint8_t sensorId, int16_t *value)
 	getSensorValue(sensorId, value);
 }
 
-void Roomba::RequestSensor(uint8_t sensorId, char *value)
+void Roomba::RequestSensor(uint8_t sensorId, uint8_t *value)
 {
-
-
 	if(m_isStreamMode) {
 		m_AsyncThreadMutex.Lock();
 		std::map<SensorID, uint16_t>::const_iterator it = m_SensorDataMap.find((SensorID)sensorId);
@@ -694,9 +692,8 @@ void Roomba::RequestSensor(uint8_t sensorId, char *value)
 	getSensorValue(sensorId, value);
 }
 
-void Roomba::RequestSensor(uint8_t sensorId, uint8_t *value)
+void Roomba::RequestSensor(uint8_t sensorId, int8_t *value)
 {
-
 	if(m_isStreamMode) {
 		m_AsyncThreadMutex.Lock();
 		std::map<SensorID, uint16_t>::const_iterator it = m_SensorDataMap.find((SensorID)sensorId);
