@@ -460,36 +460,14 @@ void Roomba::Run()
 	m_AsyncThreadReceiveCounter = 0;
 
 	while(m_isStreamMode) {
-<<<<<<< HEAD
-		Thread::Sleep(10);
-		while(1) {
-			m_pTransport->ReceiveData(header, 1, &readBytes);
-			if(header[0] == 19) break;
-		}
-		m_pTransport->ReceiveData(header+1, 1, &readBytes);
-		if(header[1] > bufSize) {
-			delete buffer;
-			bufSize = header[1];
-			buffer = new unsigned char[bufSize];
-		}
-		sum = 19 + header[1];
-		m_pTransport->ReceiveData(buffer, header[1], &readBytes);
-		if(readBytes != header[1]) {
-			std::cout << "Received Packet is wrong." << std::endl;
-			delete buffer;
-			buffer = NULL;
-			m_isStreamMode = 0;
-			Exit(-1);
-=======
+	  Thread::Sleep(100);
 		if(m_Version != Roomba::VERSION_500_SERIES) {
 			handleBasicData();
 		} else {
 			handleStreamData();
->>>>>>> 4af62ede6d037be80370a42c17c9ed09e24e8166
 		}
 
 		processOdometry();
-		//Sleep(10);
 	}
 
 	std::cout << "Exiting Sensor Stream" << std::endl;
@@ -649,10 +627,8 @@ void Roomba::RequestSensor(uint8_t sensorId, int16_t *value)
 	getSensorValue(sensorId, value);
 }
 
-void Roomba::RequestSensor(uint8_t sensorId, char *value)
+void Roomba::RequestSensor(uint8_t sensorId, uint8_t *value)
 {
-
-
 	if(m_isStreamMode) {
 		m_AsyncThreadMutex.Lock();
 		std::map<SensorID, uint16_t>::const_iterator it = m_SensorDataMap.find((SensorID)sensorId);
@@ -687,9 +663,8 @@ void Roomba::RequestSensor(uint8_t sensorId, char *value)
 	getSensorValue(sensorId, value);
 }
 
-void Roomba::RequestSensor(uint8_t sensorId, uint8_t *value)
+void Roomba::RequestSensor(uint8_t sensorId, int8_t *value)
 {
-
 	if(m_isStreamMode) {
 		m_AsyncThreadMutex.Lock();
 		std::map<SensorID, uint16_t>::const_iterator it = m_SensorDataMap.find((SensorID)sensorId);

@@ -1,3 +1,4 @@
+#include "Thread.h"
 #include "Transport.h"
 
 using namespace net::ysuga;
@@ -33,7 +34,7 @@ int32_t Transport::ReceiveData(uint8_t *buffer, uint32_t requestSize, uint32_t* 
 {
 	uint8_t* data = new uint8_t[requestSize];
 	while ((uint32_t)m_pSerialPort->GetSizeInRxBuffer() < requestSize) {
-		Sleep(100);
+	  Thread::Sleep(100);
 	}
 
 	*readBytes = m_pSerialPort->Read(buffer, requestSize);
