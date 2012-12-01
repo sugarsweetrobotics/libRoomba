@@ -6,20 +6,19 @@ LDFLAGS=-Wall -O2
 
 UNAME = ${shell uname}
 
+TARGET_LIBDIR=/usr/local/share/libroomba/
+
+
 ifeq (\$(UNAME),Linux)
 #for Linux
 SONAME=libRoomba.so.1
 SOFILE=libRoomba.so.1.0
-TARGET_LIBDIR=/usr/lib/
-
 endif
 
 ifeq ($(UNAME),Darwin)
-#for Linux
+#for MacOSX
 SONAME=libRoomba1.dylib
 SOFILE=libRoomba1.dylib
-TARGET_LIBDIR=/usr/lib/
-
 endif
 
 
@@ -37,8 +36,14 @@ bin/demo: lib/libysuga.a
 
 
 
-install: 
-	cp bin/$(SOFILE) $(TARGET_LIBDIR)
+install:
+	mkdir -p ${TARGET_LIBDIR}
+	mkdir -p ${TARGET_LIBDIR}bin
+	mkdir -p ${TARGET_LIBDIR}include
+	mkdir -p ${TARGET_LIBDIR}lib
+	cp bin/$(SOFILE) $(TARGET_LIBDIR)lib
+	cp bin/demo ${TARGET_LIBDIR}bin
+	cp include/*.h ${TARGET_LIBDIR}include
 ifeq (\$(UNAME),Linux)
 	/sbin/ldconfig $(TARGET_LIBDIR)
 	ln -s $(TARGET_LIBDIR)$(SONAME) $(TARGET_LIBDIR)$(SOFILE)
@@ -46,7 +51,7 @@ endif
 
 
 uninstall:
-	rm ${TARGET_LIBDIR}${SOFILE}
+	rm -rf  ${TARGET_LIBDIR}
 
 
 clean:

@@ -35,6 +35,9 @@
 
 // </rtc-template>
 
+
+#include "libroomba.h"
+
 using namespace RTC;
 
 /*!

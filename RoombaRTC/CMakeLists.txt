@@ -49,6 +49,8 @@ if(NOT WIN32)
 endif(NOT WIN32)
 find_package(OpenRTM REQUIRED)
 
+find_package(LibRoomba REQUIRED)
+
 # Universal settings
 #enable_testing()
 
