@@ -7,6 +7,7 @@ include_directories(${PROJECT_BINARY_DIR})
 include_directories(${PROJECT_BINARY_DIR}/idl)
 include_directories(${OPENRTM_INCLUDE_DIRS})
 include_directories(${OMNIORB_INCLUDE_DIRS})
+include_directories(${LIBROOMBA_INCLUDE_DIR})
 add_definitions(${OPENRTM_CFLAGS})
 add_definitions(${OMNIORB_CFLAGS})
 

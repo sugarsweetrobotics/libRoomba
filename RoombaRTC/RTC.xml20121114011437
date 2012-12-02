@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<rtc:RtcProfile rtc:version="0.2" rtc:id="RTC:VenderName:Category:ModuleName:1.0.0" xmlns:rtcExt="http://www.openrtp.org/namespaces/rtc_ext" xmlns:rtcDoc="http://www.openrtp.org/namespaces/rtc_doc" xmlns:rtc="http://www.openrtp.org/namespaces/rtc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <rtc:BasicInfo xsi:type="rtcExt:basic_info_ext" rtc:updateDate="2012-11-14T01:12:42+09:00" rtc:creationDate="2012-11-14T01:12:42+09:00" rtc:version="1.0.0" rtc:vendor="VenderName" rtc:maxInstances="1" rtc:executionType="PeriodicExecutionContext" rtc:executionRate="1000.0" rtc:description="ModuleDescription" rtc:category="Category" rtc:componentKind="DataFlowComponent" rtc:activityType="PERIODIC" rtc:componentType="STATIC" rtc:name="ModuleName">
-        <rtcDoc:Doc rtcDoc:license="" rtcDoc:creator=""/>
-    </rtc:BasicInfo>
-    <rtc:Actions/>
-</rtc:RtcProfile>
