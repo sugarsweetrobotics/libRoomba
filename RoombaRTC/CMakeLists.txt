@@ -36,12 +36,12 @@ else(STATIC_LIBS)
 endif(STATIC_LIBS)
 
 # Set up installation directories
-set(BIN_INSTALL_DIR "components/bin")
-set(LIB_INSTALL_DIR "components/lib")
+set(BIN_INSTALL_DIR "bin")
+set(LIB_INSTALL_DIR "lib")
 set(INC_INSTALL_DIR
-    "components/include/${PROJECT_NAME_LOWER}-${PROJECT_VERSION_MAJOR}")
+    "include/${PROJECT_NAME_LOWER}-${PROJECT_VERSION_MAJOR}")
 set(SHARE_INSTALL_DIR
-    "components/share/${PROJECT_NAME_LOWER}-${PROJECT_VERSION_MAJOR}")
+    "share/${PROJECT_NAME_LOWER}-${PROJECT_VERSION_MAJOR}")
 
 # Get necessary dependency information
 if(NOT WIN32)

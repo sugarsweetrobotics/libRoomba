@@ -34,7 +34,8 @@ static const char* roombartc_spec[] =
     "lang_type",         "compile",
     // Configuration variables
     "conf.default.model", "500series",
-    "conf.default.serial_port", "COM1",
+    //    "conf.default.serial_port", "COM1",
+    "conf.default.serial_port", "/dev/ttyUSB0",
     "conf.default.baudrate", "115200",
     // Widget
     "conf.__widget__.model", "text",
@@ -98,7 +99,7 @@ RTC::ReturnCode_t RoombaRTC::onInitialize()
   // <rtc-template block="bind_config">
   // Bind variables and configuration variable
   bindParameter("model", m_model, "500series");
-  bindParameter("serial_port", m_serial_port, "COM1");
+  bindParameter("serial_port", m_serial_port, "/dev/ttyUSB0");
   bindParameter("baudrate", m_baudrate, "115200");
   // </rtc-template>
   
