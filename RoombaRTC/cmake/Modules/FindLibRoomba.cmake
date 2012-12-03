@@ -1,12 +1,12 @@
 find_package(PkgConfig)
-pkg_check_modules(PC_OPENRTM openrtm-aist)
-pkg_check_modules(PC_COIL libcoil)
+#pkg_check_modules(PC_OPENRTM openrtm-aist)
+#pkg_check_modules(PC_COIL libcoil)
 
 find_path(LIBROOMBA_INCLUDE_DIR libroomba.h
     HINTS ${LIBROOMBA_ROOT}/include $ENV{LIBROOMBA_ROOT}/include
     ${PC_LIBROOMBA_INCLUDE_DIRS})
 find_library(LIBROOMBA_LIBRARY roomba
-    HINTS ${LIBROOMBA_ROOT}/lib $ENV{LIBROOMBA_ROOT}/lib
+    HINTS ${LIBROOMBA_ROOT}/lib /usr/lib
     ${PC_LIBROOMBA_LIBRARY_DIRS})
 
 set(LIBROOMBA_CFLAGS ${PC_LIBROOMBA_CFLAGS_OTHER})

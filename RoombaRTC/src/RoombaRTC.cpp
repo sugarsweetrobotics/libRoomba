@@ -12,7 +12,10 @@
  * $Id$
  */
 
+
 #include "RoombaRTC.h"
+
+using namespace net::ysuga::roomba;
 
 // Module specification
 // <rtc-template block="module_spec">
@@ -126,18 +129,68 @@ RTC::ReturnCode_t RoombaRTC::onShutdown(RTC::UniqueId ec_id)
 
 RTC::ReturnCode_t RoombaRTC::onActivated(RTC::UniqueId ec_id)
 {
+  try {
+    int model = Roomba::MODEL_CREATE;
+    if(m_model == "500series") {
+      model = Roomba::MODEL_500SERIES;
+    }
+    m_pRoomba = new Roomba(model, m_serial_port.c_str(), m_baudrate);
+  } catch (std::exception &e) {
+    std::cerr << "Exception in creating Roomba: " << e.what() << std::endl;
+    return RTC::RTC_ERROR;
+  }
+  m_pRoomba->safeControl();
+  m_pRoomba->runAsync();
+  
   return RTC::RTC_OK;
 }
 
 
 RTC::ReturnCode_t RoombaRTC::onDeactivated(RTC::UniqueId ec_id)
 {
+  delete m_pRoomba;
   return RTC::RTC_OK;
 }
 
 
 RTC::ReturnCode_t RoombaRTC::onExecute(RTC::UniqueId ec_id)
 {
+  if(m_targetVelIn.isNew()) {
+    m_targetVelIn.read();
+    m_pRoomba->setMode(Roomba::MODE_FULL);
+    m_pRoomba->move(m_targetVel.data.vx, m_targetVel.data.va);
+  }
+
+  double x, y, th;
+  m_pRoomba->getCurrentPosition(&x, &y, &th);
+  m_currentPos.data.position.x = x;
+  m_currentPos.data.position.y = y;
+  m_currentPos.data.heading = th;
+  m_currentPosOut.write();
+
+  double vx, va;
+  m_pRoomba->getCurrentVelocity(&vx, &va);
+  m_currentVel.data.vx = vx;
+  m_currentVel.data.vy = 0;
+  m_currentVel.data.va = va;
+  m_currentVelOut.write();
+
+  if(m_serviceNameIn.isNew()) {
+    m_serviceNameIn.read();
+    std::string service = std::string( (char*)m_serviceName.data );
+    if(service == "clean") {
+      m_pRoomba->setMode(Roomba::MODE_NORMAL_CLEAN);
+    } else if(service == "dock") {
+      m_pRoomba->setMode(Roomba::MODE_DOCK);
+    } else if(service == "spot") {
+      m_pRoomba->setMode(Roomba::MODE_SPOT_CLEAN);
+    } else if(service == "max") {
+      m_pRoomba->setMode(Roomba::MODE_MAX_TIME_CLEAN);
+    } else if(service == "sleep") {
+      m_pRoomba->setMode(Roomba::MODE_SLEEP);
+    } 
+  }
+  
   return RTC::RTC_OK;
 }
 

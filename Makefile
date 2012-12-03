@@ -9,7 +9,7 @@ UNAME = ${shell uname}
 TARGET_LIBDIR=/usr/local/share/libroomba/
 
 
-ifeq (\$(UNAME),Linux)
+ifeq ($(UNAME),Linux)
 #for Linux
 SONAME=libRoomba.so.1
 SOFILE=libRoomba.so.1.0
@@ -17,7 +17,7 @@ endif
 
 ifeq ($(UNAME),Darwin)
 #for MacOSX
-SONAME=libRoomba1.dylib
+SONAME=libRoomba.dylib
 SOFILE=libRoomba1.dylib
 endif
 
@@ -40,18 +40,21 @@ install:
 	mkdir -p ${TARGET_LIBDIR}
 	mkdir -p ${TARGET_LIBDIR}bin
 	mkdir -p ${TARGET_LIBDIR}include
-	mkdir -p ${TARGET_LIBDIR}lib
-	cp bin/$(SOFILE) $(TARGET_LIBDIR)lib
+#	mkdir -p ${TARGET_LIBDIR}lib
+	cp bin/$(SOFILE) /usr/lib
 	cp bin/demo ${TARGET_LIBDIR}bin
 	cp include/*.h ${TARGET_LIBDIR}include
-ifeq (\$(UNAME),Linux)
-	/sbin/ldconfig $(TARGET_LIBDIR)
-	ln -s $(TARGET_LIBDIR)$(SONAME) $(TARGET_LIBDIR)$(SOFILE)
+ifeq ($(UNAME),Linux)
+	/sbin/ldconfig /usr/lib
+	ln -s /usr/lib/$(SOFILE) /usr/lib/$(SONAME)
 endif
+	ln -s /usr/lib/$(SOFILE) /usr/lib/$(SONAME)
 
 
 uninstall:
 	rm -rf  ${TARGET_LIBDIR}
+	rm -rf  /usr/lib/$(SOFILE)
+	rm -rf /usr/lib/$(SONAME) 
 
 
 clean:

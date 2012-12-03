@@ -44,6 +44,10 @@ namespace net {
 				int32_t m_EncoderRightOld;
 				int32_t m_EncoderLeftOld;
 
+			private:
+				double m_TargetVelocityX;
+				double m_TargetVelocityTh;
+
 			public:
 				enum Version {
 					VERSION_ROI, // http://media.wiley.com/product_ancillary/17/04700727/DOWNLOAD/iRobot%20Roomba%20Open%20Interface%20Specification.pdf
@@ -758,8 +762,20 @@ namespace net {
 				LIBROOMBA_API uint16_t getLeftEncoderCounts();
 
 
+			private:
+
+
+			public:
+				/**
+				 * @brief Set Target Speed in [mm/sec] and [rad/sec]
+				 *
+				 * @param trans Translational speed [mm/sec] (front positive / back negative)
+				 * @param rotate Rotational speed [mm/sec] (turn left positive / turn right negative)
+				 */
 				LIBROOMBA_API void move(const double trans, const double rotate);
 
+				LIBROOMBA_API void getCurrentVelocity(double* x, double* th);
+				LIBROOMBA_API void getCurrentPosition(double* x, double* y, double* th);
 			};
 
 		}

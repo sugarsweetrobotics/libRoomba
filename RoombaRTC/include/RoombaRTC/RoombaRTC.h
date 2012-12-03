@@ -35,8 +35,7 @@
 
 // </rtc-template>
 
-
-#include "libroomba.h"
+#include <Roomba.h>
 
 using namespace RTC;
 
@@ -326,6 +325,8 @@ class RoombaRTC
   // <rtc-template block="private_attribute">
   
   // </rtc-template>
+
+  net::ysuga::roomba::Roomba *m_pRoomba;
 
   // <rtc-template block="private_operation">
   

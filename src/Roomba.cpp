@@ -11,6 +11,7 @@ using namespace net::ysuga::roomba;
 Roomba::Roomba(const uint32_t model, const char *portName, const uint32_t baudrate) :
 m_isStreamMode(0), 
 m_X(0), m_Y(0), m_Th(0), m_EncoderInitFlag(0),
+m_TargetVelocityX(0), m_TargetVelocityTh(0),
 m_MainBrushFlag(MOTOR_OFF), m_SideBrushFlag(MOTOR_OFF), m_VacuumFlag(MOTOR_OFF)
 {
   if(model == MODEL_CREATE) {
@@ -538,6 +539,8 @@ void Roomba::move(const double trans, const double rotate)
 	double lengthOfShaft = 0.235;
 	double distance;
 	double angle;
+	m_TargetVelocityX = trans;
+	m_TargetVelocityTh = rotate;
 	if(m_Version == Roomba::MODEL_500SERIES) {
 		
 #define PULSES_TO_METER 0.000445558279992234
@@ -931,4 +934,17 @@ uint16_t Roomba::getLeftEncoderCounts()
 	uint16_t buf;
 	RequestSensor(RIGHT_ENCODER_COUNTS, &buf);
 	return buf;
+}
+
+
+void Roomba::getCurrentPosition(double* x, double* y, double* th) {
+  *x = getX();
+  *y = getY();
+  *th = getTh();
+}
+
+void Roomba::getCurrentVelocity(double* vx, double* va) {
+  *vx = m_TargetVelocityX;
+  *va = m_TargetVelocityTh;
+
 }
