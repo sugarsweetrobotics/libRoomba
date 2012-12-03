@@ -1,4 +1,4 @@
-TARGET=lib/libysuga.a bin/demo
+TARGET=lib/libysuga.a bin/roomba_demo
 
 
 CFLAGS=-Wall -O2 
@@ -8,6 +8,7 @@ UNAME = ${shell uname}
 
 TARGET_LIBDIR=/usr/local/share/libroomba/
 
+INSTALL_PREFIX=/usr/
 
 ifeq ($(UNAME),Linux)
 #for Linux
@@ -29,7 +30,7 @@ all: $(TARGET)
 lib/libysuga.a:
 	cd src;make;
 
-bin/demo: lib/libysuga.a
+bin/roomba_demo: lib/libysuga.a
 	cd example;make;
 .cpp.o:
 	$(CC) $(CFLAGS) -c $<
@@ -41,20 +42,22 @@ install:
 	mkdir -p ${TARGET_LIBDIR}bin
 	mkdir -p ${TARGET_LIBDIR}include
 #	mkdir -p ${TARGET_LIBDIR}lib
-	cp bin/$(SOFILE) /usr/lib
-	cp bin/demo ${TARGET_LIBDIR}bin
+	cp bin/$(SOFILE) ${INSTALL_PREFIX}/lib
+	cp bin/roomba_demo ${INSTALL_PREFIX}/bin
 	cp include/*.h ${TARGET_LIBDIR}include
 ifeq ($(UNAME),Linux)
 	/sbin/ldconfig /usr/lib
-	ln -s /usr/lib/$(SOFILE) /usr/lib/$(SONAME)
+
 endif
-	ln -s /usr/lib/$(SOFILE) /usr/lib/$(SONAME)
+
+
+	ln -s ${INSTALL_PREFIX}/lib/$(SOFILE) ${INSTALL_PREFIX}/lib/$(SONAME)
 
 
 uninstall:
 	rm -rf  ${TARGET_LIBDIR}
-	rm -rf  /usr/lib/$(SOFILE)
-	rm -rf /usr/lib/$(SONAME) 
+	rm -rf  ${INSTALL_PREFIX}/lib/$(SOFILE)
+	rm -rf ${INSTALL_PREFIX}/lib/$(SONAME) 
 
 
 clean:

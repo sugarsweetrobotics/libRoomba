@@ -179,14 +179,19 @@ RTC::ReturnCode_t RoombaRTC::onExecute(RTC::UniqueId ec_id)
     m_serviceNameIn.read();
     std::string service = std::string( (char*)m_serviceName.data );
     if(service == "clean") {
+      //      m_pRoomba->setMode(Roomba::MODE_START);
       m_pRoomba->setMode(Roomba::MODE_NORMAL_CLEAN);
     } else if(service == "dock") {
+      //      m_pRoomba->setMode(Roomba::MODE_START);
       m_pRoomba->setMode(Roomba::MODE_DOCK);
     } else if(service == "spot") {
+      //      m_pRoomba->setMode(Roomba::MODE_START);
       m_pRoomba->setMode(Roomba::MODE_SPOT_CLEAN);
     } else if(service == "max") {
+      //      m_pRoomba->setMode(Roomba::MODE_START;)
       m_pRoomba->setMode(Roomba::MODE_MAX_TIME_CLEAN);
     } else if(service == "sleep") {
+      //      m_pRoomba->setMode(Roomba::MODE_START);
       m_pRoomba->setMode(Roomba::MODE_SLEEP);
     } 
   }

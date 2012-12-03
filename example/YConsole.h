@@ -16,9 +16,13 @@ namespace net {
 	namespace ysuga {
 #endif
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #ifdef WIN32
 #include <conio.h>
 #else
+
 #include <termios.h>
         struct termios m_oldTermios;
 #endif

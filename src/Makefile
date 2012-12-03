@@ -9,7 +9,7 @@ OBJECTS=SerialPort.o Thread.o Roomba.o Transport.o
 
 UNAME = ${shell uname}
 
-ifeq (\$(UNAME),Linux)
+ifeq ($(UNAME),Linux)
 # for Linux
 SOFILE=../bin/libRoomba.so.1.0
 SONAME=libRoomba.so.1
