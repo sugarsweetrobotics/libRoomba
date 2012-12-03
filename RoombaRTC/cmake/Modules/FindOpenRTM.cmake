@@ -35,7 +35,7 @@ find_path(OPENRTM_INCLUDE_DIR rtm/RTC.h
     HINTS ${OPENRTM_ROOT}/include $ENV{OPENRTM_ROOT}/include
     ${PC_OPENRTM_INCLUDE_DIRS})
 find_path(COIL_INCLUDE_DIR coil/config_coil.h
-    HINTS ${OPENRTM_ROOT}/include $ENV{OPENRTM_ROOT}/include
+    HINTS ${OPENRTM_ROOT}/include $ENV{OPENRTM_ROOT}/include $ENV{RTM_ROOT}/../coil-1.1/ /usr/include/coil-1.1
     ${PC_COIL_INCLUDE_DIRS})
 find_library(OPENRTM_LIBRARY RTC
     HINTS ${OPENRTM_ROOT}/lib $ENV{OPENRTM_ROOT}/lib

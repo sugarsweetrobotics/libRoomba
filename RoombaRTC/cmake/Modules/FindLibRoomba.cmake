@@ -3,7 +3,7 @@ find_package(PkgConfig)
 #pkg_check_modules(PC_COIL libcoil)
 
 find_path(LIBROOMBA_INCLUDE_DIR libroomba.h
-    HINTS ${LIBROOMBA_ROOT}/include $ENV{LIBROOMBA_ROOT}/include
+    HINTS ${LIBROOMBA_ROOT}/include $ENV{LIBROOMBA_ROOT}/include /usr/local/share/libroomba/include
     ${PC_LIBROOMBA_INCLUDE_DIRS})
 find_library(LIBROOMBA_LIBRARY Roomba
     HINTS ${LIBROOMBA_ROOT}/lib /usr/lib

@@ -12,6 +12,7 @@ INSTALL_PREFIX=/usr/
 
 ifeq ($(UNAME),Linux)
 #for Linux
+SOLINK=libRoomba.so
 SONAME=libRoomba.so.1
 SOFILE=libRoomba.so.1.0
 endif
@@ -45,20 +46,18 @@ install:
 	cp bin/$(SOFILE) ${INSTALL_PREFIX}/lib
 	cp bin/roomba_demo ${INSTALL_PREFIX}/bin
 	cp include/*.h ${TARGET_LIBDIR}include
-ifeq ($(UNAME),Linux)
-	/sbin/ldconfig /usr/lib
-
-endif
-
-
 	ln -s ${INSTALL_PREFIX}/lib/$(SOFILE) ${INSTALL_PREFIX}/lib/$(SONAME)
+ifeq ($(UNAME),Linux)
+	ln -s ${INSTALL_PREFIX}/lib/${SONAME} ${INSTALL_PREFIX}/lib/${SOLINK}
+	/sbin/ldconfig /usr/lib
+endif
 
 
 uninstall:
 	rm -rf  ${TARGET_LIBDIR}
 	rm -rf  ${INSTALL_PREFIX}/lib/$(SOFILE)
 	rm -rf ${INSTALL_PREFIX}/lib/$(SONAME) 
-
+	rm -rf ${INSTALL_PREFIX}/lib/${SOLINK}
 
 clean:
 	cd src; make clean;
