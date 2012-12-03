@@ -551,7 +551,7 @@ void Roomba::move(const double trans, const double rotate)
 		else if(dR > 1.0) dR = 1.0;
 		if(dL < -1.0) dL = -1.0;
 		else if(dL > 1.0) dL = 1.0;
-		Roomba::driveDirect(dR * 100, dL * 100);
+		Roomba::driveDirect(dR * 1000, dL * 1000);
 	} else {
 		double dR = trans + rotate * lengthOfShaft;
 		double dL = trans - rotate * lengthOfShaft;
@@ -559,7 +559,7 @@ void Roomba::move(const double trans, const double rotate)
 		else if(dR > 1.0) dR = 1.0;
 		if(dL < -1.0) dL = -1.0;
 		else if(dL > 1.0) dL = 1.0;
-		Roomba::driveDirect(dR * 100, dL * 100);
+		Roomba::driveDirect(dR * 1000, dL * 1000);
 	}
 }
 
