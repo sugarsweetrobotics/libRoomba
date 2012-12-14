@@ -1,4 +1,3 @@
-
 CC=g++
 AR=ar
 CFLAGS=-O2 -Wall -fPIC -I../include -c 
@@ -13,7 +12,7 @@ ifeq ($(UNAME),Linux)
 # for Linux
 SOFILE=../bin/libRoomba.so.1.0
 SONAME=libRoomba.so.1
-SOFLAGS=-shared -W1,-soanme,$(SONAME) 
+SOFLAGS=-shared -Wl,-soname,$(SONAME) 
 
 endif
 
