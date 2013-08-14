@@ -1,0 +1,37 @@
+# libroomba CMake config file
+#
+# This file sets the following variables:
+# libroomba_FOUND - Always TRUE.
+# libroomba_INCLUDE_DIRS - Directories containing the libroomba include files.
+# libroomba_IDL_DIRS - Directories containing the libroomba IDL files.
+# libroomba_LIBRARIES - Libraries needed to use libroomba.
+# libroomba_DEFINITIONS - Compiler flags for libroomba.
+# libroomba_VERSION - The version of libroomba found.
+# libroomba_VERSION_MAJOR - The major version of libroomba found.
+# libroomba_VERSION_MINOR - The minor version of libroomba found.
+# libroomba_VERSION_REVISION - The revision version of libroomba found.
+# libroomba_VERSION_CANDIDATE - The candidate version of libroomba found.
+
+message(STATUS "Found roomba-@PROJECT_VERSION@")
+set(roomba_FOUND TRUE)
+
+set(roomba_INCLUDE_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME@-@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@"
+    )
+
+if(WIN32)
+    set(roomba_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME@@CMAKE_STATIC_LIBRARY_SUFFIX@"
+        )
+else(WIN32)
+    set(roomba_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME@@CMAKE_SHARED_LIBRARY_SUFFIX@"
+        )
+endif(WIN32)
+
+set(roomba_VERSION @PROJECT_VERSION@)
+set(roomba_VERSION_MAJOR @PROJECT_VERSION_MAJOR@)
+set(roomba_VERSION_MINOR @PROJECT_VERSION_MINOR@)
+set(roomba_VERSION_REVISION @PROJECT_VERSION_REVISION@)
+set(roomba_VERSION_CANDIDATE @PROJECT_VERSION_CANDIDATE@)
+
