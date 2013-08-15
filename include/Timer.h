@@ -7,6 +7,7 @@
 #ifndef TIMER_HEADER_INCLUDED
 #define TIMER_HEADER_INCLUDED
 
+
 #include "type.h"
 #include "TimeSpec.h"
 
@@ -32,7 +33,7 @@ namespace pcwrapper {
 	 * @brief Timer class
 	 * @endif
 	 */
-	class DLL_API Timer
+	class PCWRAPPER_API Timer
 	{
 	private:
 #ifdef WIN32

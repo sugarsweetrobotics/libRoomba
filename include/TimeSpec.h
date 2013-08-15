@@ -6,7 +6,7 @@
 
 #ifndef TIMESPEC_HEADER_INCLUDED
 #define TIMESPEC_HEADER_INCLUDED
-
+#include "pcwrapper.h"
 #include "type.h"
 
 /**
@@ -28,7 +28,7 @@ namespace pcwrapper {
      *
 	 * @endif
 	 */
-	struct DLL_API TimeSpec {
+	struct PCWRAPPER_API TimeSpec {
 	private:
 
 	public:
