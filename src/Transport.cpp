@@ -1,42 +1,36 @@
 #include "Thread.h"
 #include "Transport.h"
 
-using namespace net::ysuga;
-using namespace net::ysuga::roomba;
+#include "Timer.h"
 
-Transport::Transport(const char* portName, const uint16_t baudrate)
-{
-	m_pSerialPort = new SerialPort(portName, baudrate);
+using namespace ssr;
+
+Transport::Transport(const char* portName, const uint16_t baudrate) {
+  m_pSerialPort = new SerialPort(portName, baudrate);
+  m_pBuffer = new uint8_t[256];
 }
 
 
-Transport::~Transport(void)
-{
-	delete m_pSerialPort;
-}
-
-int32_t Transport::SendPacket(uint8_t opCode, 
-						  const uint8_t *dataBytes /*= NULL*/,
-						  const uint32_t dataSize /*= 0*/)
-{
-	uint8_t* buffer = new uint8_t[dataSize + 1];
-	buffer[0] = opCode;
-	for(unsigned int i = 1;i < dataSize + 1;i++) {
-		buffer[i] = dataBytes[i-1];
-	}
-	m_pSerialPort->Write(buffer, dataSize + 1);
-	delete buffer;
-	return 0;
+Transport::~Transport(void) {
+  delete m_pBuffer;
+  delete m_pSerialPort;
 }
 
 
-int32_t Transport::ReceiveData(uint8_t *buffer, uint32_t requestSize, uint32_t* readBytes)
-{
-	uint8_t* data = new uint8_t[requestSize];
-	while ((uint32_t)m_pSerialPort->GetSizeInRxBuffer() < requestSize) {
-	  Thread::Sleep(100);
-	}
+Packet Transport::ReceivePacket(const uint32_t requestSize, const uint32_t timeout) {
+  ReceiveData(m_pBuffer, requestSize, timeout);
+  return Packet(m_pBuffer[0], m_pBuffer+1, requestSize);
+}
 
-	*readBytes = m_pSerialPort->Read(buffer, requestSize);
-	return 0;
+void Transport::ReceiveData(uint8_t *pData, const uint32_t requestSize, const uint32_t timeout) {
+  m_Timer.tick();
+  TimeSpec current;
+  while ((uint32_t)m_pSerialPort->GetSizeInRxBuffer() < requestSize) {
+    Thread::Sleep(10);
+    m_Timer.tack(&current);
+    if (current.getUsec() > timeout) {
+      throw TimeoutException();
+    }
+  }
+  uint32_t readBytes = m_pSerialPort->Read(pData, requestSize);
 }

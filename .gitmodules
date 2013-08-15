@@ -1,0 +1,3 @@
+[submodule "libaqua"]
+	path = libaqua
+	url = https://github.com/sugarsweetrobotics/libaqua.git

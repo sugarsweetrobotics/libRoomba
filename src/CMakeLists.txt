@@ -1,8 +1,8 @@
-set(_srcs Roomba.cpp Thread.cpp Transport.cpp Timer.cpp libroomba.cpp SerialPort.cpp)
+set(_srcs RoombaImpl.cpp Transport.cpp libroomba.cpp )
 set(_demo_srcs demo.cpp)
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
-include_directories(${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME})
+include_directories(${PROJECT_SOURCE_DIR}/libaqua/include)
 
 find_package(Threads)
 
