@@ -7,7 +7,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME})
 find_package(Threads)
 
 add_library(${PROJECT_NAME} SHARED ${_srcs})
-
+add_library(${PROJECT_NAME}Static STATIC  ${_srcs})
 add_executable(${PROJECT_NAME}_demo ${_demo_srcs})
 target_link_libraries(${PROJECT_NAME}_demo ${PROJECT_NAME} ${CMAKE_THREAD_LIBS_INIT})
 
