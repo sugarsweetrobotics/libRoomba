@@ -3,64 +3,8 @@
 
 namespace ssr {
 
-
-  class Pose {
-  public:
-    double x;
-    double y;
-    double th;
-    
-  public:
-    Pose(double x, double y, double th) {
-      this->x = x;
-      this->y = y;
-      this->th = th;
-    }
-    
-    Pose(const Pose& pose) {
-      this->x = pose.x;
-      this->y = pose.y;
-      this->th = pose.th;
-    }
-    
-    void operator=(const Pose& pose) {
-      this->x = pose.x;
-      this->y = pose.y;
-      this->th = pose.th;
-    }
-    
-    virtual ~Pose() {}
-  };
-
-
-  class Velocity {
-  public:
-    double x;
-    double y;
-    double th;
-    
-  public:
-    Velocity(double x, double y, double th) {
-      this->x = x;
-      this->y = y;
-      this->th = th;
-    }
-    
-    Velocity(const Velocity& velocity) {
-      this->x = velocity.x;
-      this->y = velocity.y;
-      this->th = velocity.th;
-    }
-    
-    void operator=(const Velocity& velocity) {
-      this->x = velocity.x;
-      this->y = velocity.y;
-      this->th = velocity.th;
-    }
-    
-    virtual ~Velocity() {}
-  };
-
+  /*
+  */
   
   
   /**

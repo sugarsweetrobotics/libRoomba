@@ -22,25 +22,18 @@ namespace ssr {
    * @brief Roomba Control Library main class.
    * @see http://www.irobot.lv/uploaded_files/File/iRobot_Roomba_500_Open_Interface_Spec.pdf
    */
-  class RoombaImpl : public Roomba, public Thread {
-  private:
-    
+  class ROOMBA_API RoombaImpl : public Roomba, public Thread {
   private:
     double m_TargetVelocityX;
     double m_TargetVelocityTh;
-    
-  public:
-    
-    /*
-     * THESE ENUMS MUST BE SAME AS THE ENUMS DEFINED IN COMMON.H FILE.
-     */
-    
-    
-  private:
+
     Transport m_Transport;
     Odometry m_Odometry;
     Protocol m_Protocol;
 
+    bool m_AsyncThread;
+
+    Mode m_CurrentMode;
   public:
     
     /**
@@ -50,17 +43,15 @@ namespace ssr {
      * @param portName Port Name that Roomba is connected (e.g., "\\\\.\\COM4", "/dev/ttyUSB0")
      * @param baudrate Baud Rate. Default 115200.
      */
-    LIBROOMBA_API RoombaImpl(const uint32_t model, const char *portName, const uint32_t baudrate = 115200);
+    RoombaImpl(const uint32_t model, const char *portName, const uint32_t baudrate = 115200);
     
     /**
      * @brief Destructor
      */
-    LIBROOMBA_API virtual ~RoombaImpl(void);
+    virtual ~RoombaImpl(void);
 
-
+  public:
     virtual void Run();
-  private:
-    Mode m_CurrentMode;
     
   public:
     
@@ -140,13 +131,6 @@ namespace ssr {
      */
     virtual void driveMotors(Motors mainBrush, Motors sideBrush, Motors vacuum);
 
-    virtual void getCurrentVelocity(double* x, double* th) {
-      m_Odometry.getVelocity(x, th);
-    }
-      
-    virtual void getCurrentPosition(double* x, double* y, double* th) {
-      m_Odometry.getPose(x, y, th);
-    }
 
     /**
      * @brief Set Target Speed in [mm/sec] and [rad/sec]
@@ -220,6 +204,15 @@ namespace ssr {
     
   public:
 
+  protected:
+    virtual void getCurrentVelocity(double* x, double* th) {
+      m_Odometry.getVelocity(x, th);
+    }
+      
+    virtual void getCurrentPosition(double* x, double* y, double* th) {
+      m_Odometry.getPose(x, y, th);
+    }
+
     virtual uint8_t getSensorValueUINT8(const uint8_t sensorId, const uint32_t timeout_us=ROOMBA_INFINITE) {
       return m_Protocol.getSensorValue<uint8_t>(sensorId, timeout_us);
     }
@@ -236,8 +229,6 @@ namespace ssr {
       return m_Protocol.getSensorValue<int16_t>(sensorId, timeout_us);
     }
 
-
-    
 
 
     //LIBROOMBA_API int GetBatteryChargeCurrent(const uint32_t timeout_us=ROOMBA_INFINITE);

@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Protocol.h"
 
 using namespace ssr;
@@ -16,16 +17,20 @@ Protocol::Protocol(RoombaImpl* pRoomba, Transport* pTransport,
 
 Protocol::~Protocol()
 {
+  if (m_streamMode) {
+    m_streamMode = false;
+    Join();
+  }
   delete m_pBuffer;
 }
 
 void Protocol::Run()
 {
   m_SensorDataMap.clear();
-
+  std::cout << "Protocol::Run" << std::endl;
   if (m_Version == VERSION_500_SERIES) {
     const uint8_t numSensors = 3;
-    SendorID defaultSensorId[numSensors] = {RIGHT_ENCODER_COUNTS,
+    SensorID defaultSensorId[numSensors] = {RIGHT_ENCODER_COUNTS,
 				   LEFT_ENCODER_COUNTS, 
 				   BUMPS_AND_WHEEL_DROPS};
     uint8_t buffer[numSensors+1];
@@ -34,7 +39,8 @@ void Protocol::Run()
       m_SensorDataMap[defaultSensorId[i]] = 0;
       buffer[i+1] = defaultSensorId[i];
     }
-    m_Transport.SendPacket(OP_STREAM, buffer, numSensors+1);
+    m_pTransport->SendPacket(OP_STREAM, buffer, numSensors+1);
+    std::cout << "Protocol::start Stream Mode." << std::endl;
   }
 
   m_streamMode = true;    
@@ -55,7 +61,7 @@ void Protocol::resumeSensorStream()
 {
   if(m_Version == VERSION_500_SERIES) {
     uint8_t buf = 1;
-    m_Transport.SendPacket(OP_PAUSE_RESUME_STREAM, &buf, 1);
+    m_pTransport->SendPacket(OP_PAUSE_RESUME_STREAM, &buf, 1);
   }
 }
 
@@ -63,7 +69,7 @@ void Protocol::suspendSensorStream()
 {
   if(m_Version == VERSION_500_SERIES) {
     uint8_t buf = 0;
-    m_Transport.SendPacket(OP_PAUSE_RESUME_STREAM, &buf, 1);
+    m_pTransport->SendPacket(OP_PAUSE_RESUME_STREAM, &buf, 1);
   }
 }
 
@@ -75,6 +81,7 @@ void Protocol::handleStreamData() {
   uint32_t sum;
   uint32_t timeout = 1 * 1000*1000;
 
+  std::cout << "handling StreamData" << std::endl;
   while(1) {
     m_pTransport->ReceiveData(header, 1, timeout);
     if(header[0] == 19) break;
@@ -106,6 +113,7 @@ void Protocol::handleStreamData() {
   do {
     uint8_t sensorId = m_pBuffer[counter];
     uint16_t dataBuf = 0;
+
     counter++;
     switch(sensorId) {
     case BUMPS_AND_WHEEL_DROPS:
@@ -135,6 +143,7 @@ void Protocol::handleStreamData() {
       counter++;
       m_AsyncThreadMutex.Lock();
       m_SensorDataMap[(SensorID)sensorId] = dataBuf;
+      std::cout <<"sensor:" << (int)sensorId << ", data:" << dataBuf << std::endl;
       m_AsyncThreadMutex.Unlock();
       break;
       
@@ -180,6 +189,7 @@ void Protocol::handleStreamData() {
 #endif
       m_AsyncThreadMutex.Lock();
       m_SensorDataMap[(SensorID)sensorId] = dataBuf;
+      std::cout <<"sensor:" << (int)sensorId << ", data:" << dataBuf << std::endl;
       m_AsyncThreadMutex.Unlock();
       break;
     default:
@@ -226,12 +236,12 @@ void Protocol::getSensorGroup2(uint8_t *remoteOpcode, uint8_t *buttons, int16_t 
 void Protocol::processOdometry(void)
 {
   uint32_t timeout_us = 1*1000*1000;
-  if(m_Version == MODEL_500SERIES) {
-    m_Odometry.updatePositionEncoder(getSensorValue<uint16_t>(RIGHT_ENCODER_COUNTS, timeout_us),
+  if(m_Version == VERSION_500_SERIES) {
+    m_pOdometry->updatePositionEncoder(getSensorValue<uint16_t>(RIGHT_ENCODER_COUNTS, timeout_us),
 				     getSensorValue<uint16_t>(LEFT_ENCODER_COUNTS, timeout_us),
 				     0);
   } else {
-    m_Odometry.updatePositionAngleDistance(getSensorValue<uint16_t>(DISTANCE, timeout_us),
+    m_pOdometry->updatePositionAngleDistance(getSensorValue<uint16_t>(DISTANCE, timeout_us),
 					   getSensorValue<uint16_t>(ANGLE, timeout_us)*3.141592 / 180.0,
 					   0);
   }

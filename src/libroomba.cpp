@@ -1,21 +1,25 @@
 #include "libroomba.h"
 #include "Roomba.h"
-
+#include "RoombaImpl.h"
 #include <iostream>
 
 
-using namespace net::ysuga::roomba;
-
+using namespace ssr;
 
 static int g_RoombaCounter;
 static Roomba* g_pRoomba[MAX_ROOMBA] = {NULL, };
 
+namespace ssr {
+LIBROOMBA_API Roomba* createRoomba(const Model model, const char* portname, const uint32_t baudrate/* = 115200*/) {
+  return new RoombaImpl(model, portname, baudrate);
+}
+}
 
 LIBROOMBA_API int Roomba_create(const uint32_t model, const char* portname, const uint32_t baudrate)
 {
-	g_pRoomba[g_RoombaCounter] = new Roomba(model, portname, baudrate);
-	g_RoombaCounter++;
-	return g_RoombaCounter-1;
+  g_pRoomba[g_RoombaCounter] = createRoomba((const Model)model, portname, baudrate);//new Roomba(model, portname, baudrate);
+  g_RoombaCounter++;
+  return g_RoombaCounter-1;
 }
 
 LIBROOMBA_API int Roomba_destroy(const int hRoomba)
@@ -35,7 +39,7 @@ LIBROOMBA_API int Roomba_runAsync(const int hRoomba)
 
 LIBROOMBA_API int Roomba_setMode(const int hRoomba, const int mode)
 {
-	g_pRoomba[hRoomba]->setMode((Roomba::Mode)mode);
+	g_pRoomba[hRoomba]->setMode((Mode)mode);
 	return 0;
 }
 
@@ -121,7 +125,7 @@ LIBROOMBA_API int Roomba_drivePWM(const int hRoomba, const short rightWheel, con
 LIBROOMBA_API int Roomba_driveMotors(const int hRoomba, const int mainBrush, const int sideBrush, const int vacuum)
 {
 	try {
-		g_pRoomba[hRoomba]->driveMotors((Roomba::Motors)mainBrush, (Roomba::Motors)sideBrush, (Roomba::Motors)vacuum);
+		g_pRoomba[hRoomba]->driveMotors((Motors)mainBrush, (Motors)sideBrush, (Motors)vacuum);
 	} catch (PreconditionNotMetError &e) {
 		std::cerr << "Error in " << __FUNCTION__ << " " << e.what() << std::endl;
 		return PRECONDITION_NOT_MET;
@@ -132,7 +136,7 @@ LIBROOMBA_API int Roomba_driveMotors(const int hRoomba, const int mainBrush, con
 LIBROOMBA_API int Roomba_driveMainBrsuh(const int hRoomba, const int flag)
 {
 	try {
-		g_pRoomba[hRoomba]->driveMainBrush((Roomba::Motors)flag);
+		g_pRoomba[hRoomba]->driveMainBrush((Motors)flag);
 	} catch (PreconditionNotMetError &e) {
 		std::cerr << "Error in " << __FUNCTION__ << " " << e.what() << std::endl;
 		return PRECONDITION_NOT_MET;
@@ -143,7 +147,7 @@ LIBROOMBA_API int Roomba_driveMainBrsuh(const int hRoomba, const int flag)
 LIBROOMBA_API int Roomba_driveSideBrsuh(const int hRoomba, const int flag)
 {
 	try {
-		g_pRoomba[hRoomba]->driveSideBrush((Roomba::Motors)flag);
+		g_pRoomba[hRoomba]->driveSideBrush((Motors)flag);
 	} catch (PreconditionNotMetError &e) {
 		std::cerr << "Error in " << __FUNCTION__ << " " << e.what() << std::endl;
 		return PRECONDITION_NOT_MET;
@@ -154,7 +158,7 @@ LIBROOMBA_API int Roomba_driveSideBrsuh(const int hRoomba, const int flag)
 LIBROOMBA_API int Roomba_driveVacuum(const int hRoomba, const int flag)
 {
 	try {
-		g_pRoomba[hRoomba]->driveVacuum((Roomba::Motors)flag);
+		g_pRoomba[hRoomba]->driveVacuum((Motors)flag);
 	} catch (PreconditionNotMetError &e) {
 		std::cerr << "Error in " << __FUNCTION__ << " " << e.what() << std::endl;
 		return PRECONDITION_NOT_MET;

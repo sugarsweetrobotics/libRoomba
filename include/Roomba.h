@@ -2,6 +2,7 @@
 #include <string>
 #include <exception>
 #include "op_code.h"
+
 #define ROOMBA_API
 
 namespace ssr {
@@ -45,9 +46,72 @@ namespace ssr {
   };
 
 
+  class Pose {
+  public:
+    double x;
+    double y;
+    double th;
+    
+  public:
+    Pose() {
+      x = y = th = 0;
+    }
 
-  class ROOMBA_API Roomba {
-  private:
+    Pose(double x, double y, double th) {
+      this->x = x;
+      this->y = y;
+      this->th = th;
+    }
+    
+    Pose(const Pose& pose) {
+      this->x = pose.x;
+      this->y = pose.y;
+      this->th = pose.th;
+    }
+    
+    void operator=(const Pose& pose) {
+      this->x = pose.x;
+      this->y = pose.y;
+      this->th = pose.th;
+    }
+    
+    virtual ~Pose() {}
+  };
+
+
+  class Velocity {
+  public:
+    double x;
+    double y;
+    double th;
+    
+  public:
+    Velocity() {
+      x = y = th = 0;
+    }
+
+    Velocity(double x, double y, double th) {
+      this->x = x;
+      this->y = y;
+      this->th = th;
+    }
+    
+    Velocity(const Velocity& velocity) {
+      this->x = velocity.x;
+      this->y = velocity.y;
+      this->th = velocity.th;
+    }
+    
+    void operator=(const Velocity& velocity) {
+      this->x = velocity.x;
+      this->y = velocity.y;
+      this->th = velocity.th;
+    }
+    
+    virtual ~Velocity() {}
+  };
+
+  class Roomba {
   private:
     Motors m_MainBrushFlag; //> For remember internal state
     Motors m_SideBrushFlag; //> For remember internal state
@@ -57,13 +121,15 @@ namespace ssr {
     uint8_t m_intensity; //> For remember internal state
     uint8_t m_color; //> For remember internal state
 
-
   public:
   Roomba(): m_MainBrushFlag(MOTOR_OFF), m_SideBrushFlag(MOTOR_OFF), m_VacuumFlag(MOTOR_OFF), m_ledFlag(0),
       m_intensity(0), m_color(0) {}
+
     virtual ~Roomba() {}
 
-  private:
+  public:
+    virtual void runAsync() = 0;
+
     /** 
      * @brief Set Roomba's mode 
      *
@@ -104,7 +170,7 @@ namespace ssr {
      * @param turnRadius Radius (-2000 – 2000 mm) (negative => CCW)
      * @throw PreconditionNotMetError
      */
-    virtual void drive(uint16_t translation, uint16_t turnRadius) = 0;
+    virtual void drive(int16_t translation, int16_t turnRadius) = 0;
     
     
     /**
@@ -137,10 +203,6 @@ namespace ssr {
     virtual void driveMotors(Motors mainBrush, Motors sideBrush, Motors vacuum) = 0;
 
 
-    virtual void getCurrentVelocity(double* x, double* th) = 0;
-      
-    virtual void getCurrentPosition(double* x, double* y, double* th) = 0;
-
     /**
      * @brief Set Target Speed in [mm/sec] and [rad/sec]
      *
@@ -169,6 +231,17 @@ namespace ssr {
     virtual void setLED(uint8_t leds, uint8_t intensity, uint8_t color = 127) = 0;
 
   protected:
+    /**
+     * @brief Get Current Velocity for primitive types.
+     */
+    virtual void getCurrentVelocity(double* x, double* th) = 0;
+
+    /**
+     * @brief Get Current Pose for primitive types
+     */
+    virtual void getCurrentPosition(double* x, double* y, double* th) = 0;
+
+
     virtual uint8_t getSensorValueUINT8(const uint8_t sensorId, const uint32_t timeout_us=ROOMBA_INFINITE) = 0;
 
     virtual int8_t getSensorValueINT8(const uint8_t sensorId, const uint32_t timeout_us=ROOMBA_INFINITE) = 0;
@@ -179,6 +252,25 @@ namespace ssr {
 
 
   public:
+    // Inline Functions
+
+    /**
+     */
+    Pose getCurrentPose() {
+      Pose pose;
+      getCurrentPosition(&(pose.x), &(pose.y), &(pose.th));
+      return pose;
+    }
+
+    /**
+     */
+    Velocity getCurrentVelocity() {
+      Velocity vel;
+      getCurrentVelocity(&(vel.x), &(vel.th));
+      vel.y = 0;
+      return vel;
+    }
+
     /**
      * @brief Start Open Interface Control Mode
      * This function is automatically called when the Roomba class object is created.

@@ -9,7 +9,8 @@ using namespace ssr;
 RoombaImpl::RoombaImpl(const uint32_t model, const char *portName, const uint32_t baudrate) :
   m_TargetVelocityX(0), m_TargetVelocityTh(0), 
   m_Transport(portName, baudrate), 
-  m_Protocol(this, &m_Transport, &m_Odometry, model==MODEL_CREATE ? VERSION_ROI : VERSION_500_SERIES)
+  m_Protocol(this, &m_Transport, &m_Odometry, model==MODEL_CREATE ? VERSION_ROI : VERSION_500_SERIES),
+  m_AsyncThread(false)
 {
   //m_Protocol.Start();
   //start();
@@ -18,6 +19,10 @@ RoombaImpl::RoombaImpl(const uint32_t model, const char *portName, const uint32_
 
 RoombaImpl::~RoombaImpl(void)
 {
+  if(m_AsyncThread) {
+    m_AsyncThread = false;
+    Join();
+  }
   safeControl();
   //start();
 }
@@ -180,6 +185,11 @@ void RoombaImpl::setLED(uint8_t leds, uint8_t intensity, uint8_t color /* = 127*
 
 void RoombaImpl::Run()
 {
+  m_AsyncThread = true;
+  while(m_AsyncThread) {
+    Thread::Sleep(100);
+    std::cout << "Async Thread" << std::endl;
+  }
   /*
 	m_AsyncThreadReceiveCounter = 0;
 

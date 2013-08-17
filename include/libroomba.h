@@ -30,6 +30,14 @@
 #include "common.h"
 
 #ifdef __cplusplus
+#include "Roomba.h"
+namespace ssr {
+  /**
+   * @brief Factory method for Roomba Class Object.
+   */
+  LIBROOMBA_API Roomba* createRoomba(const Model model, const char* portname, const uint32_t baudrate = 115200);
+}
+
 extern "C" {
 #endif
 
