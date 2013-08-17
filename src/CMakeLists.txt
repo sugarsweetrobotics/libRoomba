@@ -10,6 +10,14 @@ find_package(Threads)
 
 add_library(${PROJECT_NAME} SHARED ${_srcs})
 add_library(${PROJECT_NAME}Static STATIC  ${_srcs})
+
+
+
+set_target_properties(${PROJECT_NAME} PROPERTIES 
+  COMPILE_FLAGS "-DaquaStatic_EXPORTS") 
+set_target_properties(${PROJECT_NAME}Static PROPERTIES 
+  COMPILE_FLAGS "-DaquaStatic_EXPORTS -DroombaStatic_EXPORTS") 
+
 add_executable(${PROJECT_NAME}_demo ${_demo_srcs})
 add_executable(${PROJECT_NAME}_example ${_example_srcs})
 target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME} aquaStatic)
@@ -22,7 +30,7 @@ install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_demo
     RUNTIME DESTINATION ${BIN_INSTALL_DIR} 
     LIBRARY DESTINATION ${LIB_INSTALL_DIR} 
     ARCHIVE DESTINATION ${LIB_INSTALL_DIR} )
-install(EXPORT ${PROJECT_NAME}
-    DESTINATION ${LIB_INSTALL_DIR}/${PROJECT_NAME}
-    FILE ${PROJECT_NAME}Depends.cmake)
+#install(EXPORT ${PROJECT_NAME}
+#    DESTINATION ${LIB_INSTALL_DIR}/${PROJECT_NAME}
+#    FILE ${PROJECT_NAME}Depends.cmake)
 

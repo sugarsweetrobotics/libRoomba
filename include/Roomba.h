@@ -2,6 +2,7 @@
 #include <string>
 #include <exception>
 #include "op_code.h"
+#include "type.h"
 
 #define ROOMBA_API
 
