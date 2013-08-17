@@ -12,7 +12,7 @@
 #include "Packet.h"
 #include "Timer.h"
 
-#define ROOMBA_INFINITE 0xFFFFFFFF
+//#define ROOMBA_INFINITE 0xFFFFFFFF
 namespace ssr {
 
   class Transport {

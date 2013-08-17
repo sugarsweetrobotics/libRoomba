@@ -28,7 +28,7 @@ void Transport::ReceiveData(uint8_t *pData, const uint32_t requestSize, const ui
   while ((uint32_t)m_pSerialPort->GetSizeInRxBuffer() < requestSize) {
     Thread::Sleep(10);
     m_Timer.tack(&current);
-    if (current.getUsec() > timeout) {
+    if (current.sec * 1000*1000 + current.usec> timeout) {
       throw TimeoutException();
     }
   }

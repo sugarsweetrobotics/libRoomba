@@ -1,36 +1,74 @@
 #include "Protocol.h"
 
-
-
 using namespace ssr;
 
-
-Protocol::Protocol(RoombaImpl* pRoomba, Transport* pTransport) {
+Protocol::Protocol(RoombaImpl* pRoomba, Transport* pTransport, 
+		   Odometry* pOdometry,
+		   Version version) :
+  m_pRoomba(pRoomba), m_pTransport(pTransport), m_pOdometry(pOdometry),
+  m_pBuffer(NULL), m_streamMode(false), m_SleepTime(100), m_Version(version)
+{
   m_pRoomba = pRoomba;
   m_pTransport = pTransport;
+  m_pOdometry = pOdometry;
 }
 
 
 Protocol::~Protocol()
 {
-
+  delete m_pBuffer;
 }
 
 void Protocol::Run()
 {
+  m_SensorDataMap.clear();
+
+  if (m_Version == VERSION_500_SERIES) {
+    const uint8_t numSensors = 3;
+    SendorID defaultSensorId[numSensors] = {RIGHT_ENCODER_COUNTS,
+				   LEFT_ENCODER_COUNTS, 
+				   BUMPS_AND_WHEEL_DROPS};
+    uint8_t buffer[numSensors+1];
+    buffer[0] = numSensors;
+    for (uint32_t i = 0;i < numSensors;i++) {
+      m_SensorDataMap[defaultSensorId[i]] = 0;
+      buffer[i+1] = defaultSensorId[i];
+    }
+    m_Transport.SendPacket(OP_STREAM, buffer, numSensors+1);
+  }
+
+  m_streamMode = true;    
   while(m_streamMode) {
     Thread::Sleep(m_SleepTime);
-    if(m_Version != Roomba::VERSION_500_SERIES) {
+    if(m_Version != VERSION_500_SERIES) {
       handleBasicData();
     }else {
       handleStreamData();
     }
     processOdometry();
   }
+
+  m_streamMode = false;
 }
 
+void Protocol::resumeSensorStream()
+{
+  if(m_Version == VERSION_500_SERIES) {
+    uint8_t buf = 1;
+    m_Transport.SendPacket(OP_PAUSE_RESUME_STREAM, &buf, 1);
+  }
+}
+
+void Protocol::suspendSensorStream()
+{
+  if(m_Version == VERSION_500_SERIES) {
+    uint8_t buf = 0;
+    m_Transport.SendPacket(OP_PAUSE_RESUME_STREAM, &buf, 1);
+  }
+}
+
+
 void Protocol::handleStreamData() {
-  uint8_t *buffer = NULL;
   uint32_t readBytes;
   uint8_t header[2];
   uint8_t bufSize = 0;
@@ -44,14 +82,14 @@ void Protocol::handleStreamData() {
 
   m_pTransport->ReceiveData(header+1, 1, timeout);
   if(header[1] > bufSize) {
-    delete buffer;
+    delete m_pBuffer;
     bufSize = header[1];
-    buffer = new uint8_t[bufSize];
+    m_pBuffer = new uint8_t[bufSize];
   }
   sum = 19 + header[1];
-  m_pTransport->ReceiveData(buffer, header[1], timeout);
+  m_pTransport->ReceiveData(m_pBuffer, header[1], timeout);
   for(int i = 0;i < header[1];i++) {
-    sum += buffer[i];
+    sum += m_pBuffer[i];
   }
 
   uint8_t check_sum;
@@ -66,7 +104,7 @@ void Protocol::handleStreamData() {
 
   int counter = 0;
   do {
-    uint8_t sensorId = buffer[counter];
+    uint8_t sensorId = m_pBuffer[counter];
     uint16_t dataBuf = 0;
     counter++;
     switch(sensorId) {
@@ -93,7 +131,7 @@ void Protocol::handleStreamData() {
     case NUMBER_OF_STREAM_PACKETS:
     case LIGHT_BUMPER:
     case STASIS:
-      dataBuf |= buffer[counter];
+      dataBuf |= m_pBuffer[counter];
       counter++;
       m_AsyncThreadMutex.Lock();
       m_SensorDataMap[(SensorID)sensorId] = dataBuf;
@@ -129,15 +167,15 @@ void Protocol::handleStreamData() {
     case MAIN_BRUSH_MOTOR_CURRENT:
     case SIDE_BRUSH_MOTOR_CURRENT:
 #ifdef __BIG_ENDIAN__
-      dataBuf |= buffer[counter];
+      dataBuf |= m_pBuffer[counter];
       counter++;
       dataBuf <<= 8;
-      dataBuf |= buffer[counter];
+      dataBuf |= m_pBuffer[counter];
       counter++;
 #else
-      dataBuf |= ((uint16_t)buffer[counter] << 8);
+      dataBuf |= ((uint16_t)m_pBuffer[counter] << 8);
       counter++;
-      dataBuf |= buffer[counter];
+      dataBuf |= m_pBuffer[counter];
       counter++;
 #endif
       m_AsyncThreadMutex.Lock();
@@ -152,9 +190,10 @@ void Protocol::handleStreamData() {
 
 void Protocol::handleBasicData()
 {
+  uint32_t timeout = 1 * 1000 * 1000;
   uint8_t opcode, buttons;
   uint16_t distance, angle;
-  getSensorGroup2(&opcode, &buttons, (int16_t*)&distance, (int16_t*)&angle);
+  getSensorGroup2(&opcode, &buttons, (int16_t*)&distance, (int16_t*)&angle, timeout);
   m_AsyncThreadMutex.Lock();
   m_SensorDataMap[BUTTONS] = buttons;
   m_SensorDataMap[ANGLE] = angle;
@@ -184,67 +223,17 @@ void Protocol::getSensorGroup2(uint8_t *remoteOpcode, uint8_t *buttons, int16_t 
   // std::cout << "D=" << *distance << " A=" << *angle << std::endl;
 }
 
-
-qqvoid Protocol::processOdometry(void)
+void Protocol::processOdometry(void)
 {
-  double lengthOfShaft = 0.235;
-  double distance;
-  double angle;
-  if(m_Version == Roomba::MODEL_500SERIES) {
-    
-    if(!m_EncoderInitFlag) {
-      m_EncoderInitFlag = true;
-      m_EncoderRightOld = getRightEncoderCounts();
-      m_EncoderLeftOld  = getLeftEncoderCounts();
-      return;
-    }
-    
-    int32_t encoderRight = getRightEncoderCounts();
-    int32_t encoderLeft  = getLeftEncoderCounts();
-
-    int32_t dR = encoderRight - m_EncoderRightOld;
-    int32_t dL = encoderLeft  - m_EncoderLeftOld;
-    
-#define PULSES_TO_METER 0.000445558279992234
-    
-    if(dR > 32767) {
-      dR -= 65535;
-    } else if (dR < -32768) {
-      dR += 65535;
-    }
-    
-    if(dL > 32767) {
-      dL -= 65535;
-    } else if (dL < -32768) {
-      dL += 65535;
-    }
-    
-    distance = (dR + dL) * PULSES_TO_METER / 2 ;
-    angle = (dR - dL) * PULSES_TO_METER / lengthOfShaft;
-    
-    m_EncoderRightOld = encoderRight;
-    m_EncoderLeftOld = encoderLeft;
+  uint32_t timeout_us = 1*1000*1000;
+  if(m_Version == MODEL_500SERIES) {
+    m_Odometry.updatePositionEncoder(getSensorValue<uint16_t>(RIGHT_ENCODER_COUNTS, timeout_us),
+				     getSensorValue<uint16_t>(LEFT_ENCODER_COUNTS, timeout_us),
+				     0);
   } else {
-    distance = getDistance();
-    angle = getAngle() * 2 / lengthOfShaft;
-    ///angle = getAngle() / 180.0 * 3.1415926;
+    m_Odometry.updatePositionAngleDistance(getSensorValue<uint16_t>(DISTANCE, timeout_us),
+					   getSensorValue<uint16_t>(ANGLE, timeout_us)*3.141592 / 180.0,
+					   0);
   }
-  double dX = distance * cos( m_Th + angle/2 );
-  double dY = distance * sin( m_Th + angle/2 );
-  m_X += dX;
-  m_Y += dY;
-  m_Th += angle;
-  if(m_Th < -3.1415926536) {
-    m_Th += 3.1415926536 * 2;
-  } else if(m_Th > 3.1415896536) {
-    m_Th -= 3.1415926536 * 2;
-  }
-}
-
-
-
-void translateMessage(const Packet& packet)
-{
-
 }
 
