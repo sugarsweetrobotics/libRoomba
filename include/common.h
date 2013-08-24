@@ -8,10 +8,10 @@
 // ソースファイルがこのファイルを含んでいる他のプロジェクトは、 
 // LIBREVAST_API 関数を DLL からインポートされたと見なすのに対し、この DLL は、このマクロで定義された
 // シンボルをエクスポートされたと見なします。
-#ifdef LIBROOMBA_EXPORTS
+#ifdef roomba_EXPORTS
 #define LIBROOMBA_API __declspec(dllexport)
 #else
-#ifdef LIBROOMBA_STATIC_EXPORTS
+#ifdef roombaStatic_EXPORTS
 #define LIBROOMBA_API 
 #else
 

@@ -7,7 +7,7 @@ Protocol::Protocol(RoombaImpl* pRoomba, Transport* pTransport,
 		   Odometry* pOdometry,
 		   Version version) :
   m_pRoomba(pRoomba), m_pTransport(pTransport), m_pOdometry(pOdometry),
-  m_pBuffer(NULL), m_streamMode(false), m_SleepTime(100), m_Version(version)
+  m_pBuffer(NULL), m_streamMode(false), m_SleepTime(10), m_Version(version)
 {
   m_pRoomba = pRoomba;
   m_pTransport = pTransport;

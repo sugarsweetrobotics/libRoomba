@@ -1,5 +1,3 @@
-
-
 #include "RoombaImpl.h"
 #include <iostream>
 #include "op_code.h"
