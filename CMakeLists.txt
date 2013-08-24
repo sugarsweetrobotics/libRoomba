@@ -31,7 +31,7 @@ set(SHARE_INSTALL_DIR
 
 # Subdirectories
 add_subdirectory(cmake)
-add_subdirectory(libaqua)
+#add_subdirectory(libaqua)
 add_subdirectory(include)
 add_subdirectory(doc)
 add_subdirectory(src)
