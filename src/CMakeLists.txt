@@ -3,14 +3,14 @@ set(_srcs RoombaImpl.cpp Transport.cpp libroomba.cpp Protocol.cpp)
 set(_demo_srcs demo.cpp)
 set(_example_srcs example.cpp)
 
-include_directories(${PROJECT_SOURCE_DIR}/include)
+#include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../include)
 include_directories(${CMAKE_SOURCE_DIR}/libaqua/include)
 
 find_package(Threads)
 
 add_library(${PROJECT_NAME} SHARED ${_srcs})
 add_library(${PROJECT_NAME}Static STATIC  ${_srcs})
-
 
 
 set_target_properties(${PROJECT_NAME} PROPERTIES 

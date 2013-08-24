@@ -30,11 +30,11 @@ set(SHARE_INSTALL_DIR
     "share/${PROJECT_NAME}-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}")
 
 # Subdirectories
-add_subdirectory(cmake)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 #add_subdirectory(libaqua)
-add_subdirectory(include)
-add_subdirectory(doc)
-add_subdirectory(src)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/include)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/doc)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # Package creation
 include(InstallRequiredSystemLibraries)
@@ -42,7 +42,7 @@ set(PROJECT_EXECUTABLES ${PROJECT_NAME}_demo
     "demo")
 
 #example install
-set(example_files example/CMakeLists.txt example/demo.cpp)
+set(example_files ${CMAKE_CURRENT_SOURCE_DIR}/example/CMakeLists.txt example/demo.cpp)
 install(FILES ${example_files} DESTINATION ${SHARE_INSTALL_DIR}/example COMPONENT library)
 
 set(cpack_options "${PROJECT_BINARY_DIR}/cpack_options.cmake")
