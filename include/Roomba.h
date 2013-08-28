@@ -46,7 +46,9 @@ namespace ssr {
     ~ChecksumException() throw() {}
   };
 
-
+  /**
+   * @brief Pose struct. Unit is meter/radian
+   */
   class Pose {
   public:
     double x;
@@ -79,7 +81,9 @@ namespace ssr {
     virtual ~Pose() {}
   };
 
-
+  /**
+   * Velocity struct. Unit is meter/sec and radian/sec
+   */
   class Velocity {
   public:
     double x;
@@ -112,6 +116,10 @@ namespace ssr {
     virtual ~Velocity() {}
   };
 
+
+  /**
+   * @brief Roomba interface
+   */
   class Roomba {
   private:
     Motors m_MainBrushFlag; //> For remember internal state
@@ -256,6 +264,9 @@ namespace ssr {
     // Inline Functions
 
     /**
+	 * @brief Get current Pose 2D
+	 * @return Pose struct data.
+	 * @see ssr::Pose
      */
     Pose getCurrentPose() {
       Pose pose;
@@ -264,6 +275,9 @@ namespace ssr {
     }
 
     /**
+	 * @brief Get Current Velocity
+	 * @return Velocity struct data.
+	 * @see ssr::Velocity
      */
     Velocity getCurrentVelocity() {
       Velocity vel;

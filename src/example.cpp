@@ -29,5 +29,8 @@ int main(const int argc, const char* argv[]) {
   } catch (std::exception &e) {
     std::cout << "Excepiton:" << e.what() << std::endl;
   }
+
+  int c;
+  std::cin >> c;
   return 0;
 }

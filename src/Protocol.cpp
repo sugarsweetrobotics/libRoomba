@@ -24,34 +24,46 @@ Protocol::~Protocol()
   delete m_pBuffer;
 }
 
+void Protocol::startStreaming(void)
+{
+	uint8_t buffer[64];
+	buffer[0] = m_numStreamingSensors;
+	for (uint32_t i = 0;i < m_numStreamingSensors;i++) {
+		buffer[i+1] = m_StreamingSensorIDs[i];
+	}
+    m_pTransport->SendPacket(OP_STREAM, buffer , buffer[0]+1);
+}
+
+
 void Protocol::Run()
 {
   m_SensorDataMap.clear();
-  std::cout << "Protocol::Run" << std::endl;
+ /// std::cout << "Protocol::Run" << std::endl;
   if (m_Version == VERSION_500_SERIES) {
     const uint8_t numSensors = 3;
     SensorID defaultSensorId[numSensors] = {RIGHT_ENCODER_COUNTS,
 				   LEFT_ENCODER_COUNTS, 
 				   BUMPS_AND_WHEEL_DROPS};
-    uint8_t buffer[numSensors+1];
-    buffer[0] = numSensors;
-    for (uint32_t i = 0;i < numSensors;i++) {
-      m_SensorDataMap[defaultSensorId[i]] = 0;
-      buffer[i+1] = defaultSensorId[i];
-    }
-    m_pTransport->SendPacket(OP_STREAM, buffer, numSensors+1);
-    std::cout << "Protocol::start Stream Mode." << std::endl;
+	this->clearStreamingSensorID();
+	for (int i = 0;i < numSensors;i++) {
+		addStreamingSensorID(defaultSensorId[i]);
+	}
+	startStreaming();
   }
 
   m_streamMode = true;    
   while(m_streamMode) {
     Thread::Sleep(m_SleepTime);
-    if(m_Version != VERSION_500_SERIES) {
-      handleBasicData();
-    }else {
-      handleStreamData();
-    }
+	try {
+		if(m_Version != VERSION_500_SERIES) {
+		  handleBasicData();
+		}else {
+		  handleStreamData();
+		}
     processOdometry();
+	} catch (ChecksumException &ex) {
+//		std::cout << "Protocol::Run ->" << ex.what() << std::endl;
+	}
   }
 
   m_streamMode = false;
@@ -81,7 +93,7 @@ void Protocol::handleStreamData() {
   uint32_t sum;
   uint32_t timeout = 1 * 1000*1000;
 
-  std::cout << "handling StreamData" << std::endl;
+  //std::cout << "handling StreamData" << std::endl;
   while(1) {
     m_pTransport->ReceiveData(header, 1, timeout);
     if(header[0] == 19) break;
@@ -143,7 +155,7 @@ void Protocol::handleStreamData() {
       counter++;
       m_AsyncThreadMutex.Lock();
       m_SensorDataMap[(SensorID)sensorId] = dataBuf;
-      std::cout <<"sensor:" << (int)sensorId << ", data:" << dataBuf << std::endl;
+   //   std::cout <<"sensor:" << (int)sensorId << ", data:" << dataBuf << std::endl;
       m_AsyncThreadMutex.Unlock();
       break;
       
@@ -189,7 +201,7 @@ void Protocol::handleStreamData() {
 #endif
       m_AsyncThreadMutex.Lock();
       m_SensorDataMap[(SensorID)sensorId] = dataBuf;
-      std::cout <<"sensor:" << (int)sensorId << ", data:" << dataBuf << std::endl;
+ // std::cout <<"sensor:" << (int)sensorId << ", data:" << dataBuf << std::endl;
       m_AsyncThreadMutex.Unlock();
       break;
     default:
@@ -239,11 +251,11 @@ void Protocol::processOdometry(void)
   if(m_Version == VERSION_500_SERIES) {
     m_pOdometry->updatePositionEncoder(getSensorValue<uint16_t>(RIGHT_ENCODER_COUNTS, timeout_us),
 				     getSensorValue<uint16_t>(LEFT_ENCODER_COUNTS, timeout_us),
-				     0);
+					 m_Timer.getTimeOfDay().getUsec());
   } else {
     m_pOdometry->updatePositionAngleDistance(getSensorValue<uint16_t>(DISTANCE, timeout_us),
 					   getSensorValue<uint16_t>(ANGLE, timeout_us)*3.141592 / 180.0,
-					   0);
+					   m_Timer.getTimeOfDay().getUsec());
   }
 }
 
