@@ -51,6 +51,8 @@ namespace ssr {
     virtual ~RoombaImpl(void);
 
   public:
+	 // int16_t m_rightPWM;
+	 // int16_t m_leftPWM;
     virtual void Run();
     
   public:

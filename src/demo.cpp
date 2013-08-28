@@ -55,8 +55,14 @@ int main(const int argc, const char* argv[]) {
       std::cout << "Y            :" << std::right << pose.y << "\n";
       std::cout << "Th           :" << std::right << pose.th << "\n";
       std::cout << "---------------------------------------------------------------\n";
-      //std::cout << "Left  Bump:" << std::right << roomba.isLeftBump() << "\n";
-      //std::cout << "Right Bump:" << std::right << roomba.isRightBump() << "\n";
+      Velocity vel =  roomba.getCurrentVelocity();
+      std::cout << "Vx           :" << std::right << vel.x << "\n";
+      std::cout << "Vy           :" << std::right << vel.y << "\n";
+      std::cout << "Vth          :" << std::right << vel.th << "\n";
+      std::cout << "---------------------------------------------------------------\n";
+      std::cout << "Left  Bump:" << std::right << roomba.isLeftBump() << "\n";
+      std::cout << "Right Bump:" << std::right << roomba.isRightBump() << "\n";
+      std::cout << "---------------------------------------------------------------\n";
       std::cout << "q: quit" << std::endl;
       
       short r_vel = 0;
@@ -115,24 +121,24 @@ int main(const int argc, const char* argv[]) {
 	  
 	  
 	case 'u':
-	  roomba.setTargetVelocity(0.1, 0);
+	  roomba.setTargetVelocity(0.3, 0);
 	  r_vel = 100;
 	  l_vel = 100;
 	  break;
 	case 'm':
 	  r_vel = -100;
 	  l_vel = -100;
-	  roomba.setTargetVelocity(-0.1, 0);
+	  roomba.setTargetVelocity(-0.3, 0);
 	  break;
 	case 'h':
 	  r_vel = 100;
 	  l_vel = -100;
-	  roomba.setTargetVelocity(0, 0.1);
+	  roomba.setTargetVelocity(0, 0.3);
 	  break;
 	case 'k':
 	  r_vel = -100;
 	  l_vel = 100;
-	  roomba.setTargetVelocity(0, -0.1);
+	  roomba.setTargetVelocity(0, -0.3);
 	  break;
 	case 'j':
 	  r_vel = l_vel = 0;

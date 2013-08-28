@@ -72,7 +72,7 @@ void RoombaImpl::setMode(Mode mode)
     break;
   }
   
-  Thread::Sleep(100);
+  //Thread::Sleep(100);
 }
 
 void RoombaImpl::drive(int16_t translation, int16_t turnRadius) {
@@ -184,10 +184,32 @@ void RoombaImpl::setLED(uint8_t leds, uint8_t intensity, uint8_t color /* = 127*
 void RoombaImpl::Run()
 {
   m_AsyncThread = true;
+  //m_rightPWM = m_leftPWM = 0;
+  //double epsilon = 0.0001;
+  //double m_accelPWM = 1;
   while(m_AsyncThread) {
-    Thread::Sleep(100);
-    std::cout << "Async Thread" << std::endl;
+		Thread::Sleep(10);
+		double lengthOfShaft = 0.235;
+
+		//Velocity v = Roomba::getCurrentVelocity();
+		//double cR = v.x + v.th * lengthOfShaft;
+		//double cL = v.x - v.th * lengthOfShaft;
+		double dR = m_TargetVelocityX + m_TargetVelocityTh * lengthOfShaft;
+		double dL = m_TargetVelocityX - m_TargetVelocityTh * lengthOfShaft;
+
+		if (dR > 0.5) dR = 0.5;
+		else if (dR < -0.5) dR = -0.5;
+		if (dL > 0.5) dL = 0.5;
+		else if (dL < -0.5) dL = -0.5;
+
+		try {
+			this->driveDirect(dR*1000, dL * 1000);
+		} catch (PreconditionNotMetError &e) {
+		}
+   // std::cout << "Async Thread" << std::endl;
   }
+
+
   /*
 	m_AsyncThreadReceiveCounter = 0;
 

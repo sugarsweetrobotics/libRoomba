@@ -11,7 +11,7 @@
 #include "SerialPort.h"
 #include "Packet.h"
 #include "Timer.h"
-
+#include "Thread.h"
 //#define ROOMBA_INFINITE 0xFFFFFFFF
 namespace ssr {
 
@@ -20,6 +20,9 @@ namespace ssr {
     SerialPort* m_pSerialPort;
     uint8_t *m_pBuffer;
     Timer m_Timer;
+
+	Mutex m_SenderMutex;
+
   public:
     Transport(const char* portName, const uint16_t baudrate);
     
@@ -28,6 +31,7 @@ namespace ssr {
     void SendPacket(const Packet& packet) {SendPacket(packet.getOpCode(), packet.getData(), packet.getSize());}
 
     void SendPacket(const uint8_t opCode, const uint8_t* pData=NULL, const uint32_t Size=0) {
+		MutexBinder binder(m_SenderMutex);
       m_pSerialPort->Write(&opCode, 1);
       m_pSerialPort->Write(pData, Size);
     }
