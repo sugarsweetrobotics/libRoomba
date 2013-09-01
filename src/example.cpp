@@ -20,7 +20,7 @@ int main(const int argc, const char* argv[]) {
   try {
     Roomba* pRoomba = createRoomba(MODEL_500SERIES, argv[1], baudrate);
     pRoomba->safeControl();
-    pRoomba->runAsync();
+    //pRoomba->runAsync();
     int c;
     std::cin >> c;
     pRoomba->clean();
