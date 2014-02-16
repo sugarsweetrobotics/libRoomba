@@ -12,6 +12,7 @@ RoombaImpl::RoombaImpl(const uint32_t model, const char *portName, const uint32_
 {
   //m_Protocol.Start();
   //start();
+	m_Protocol.suspendSensorStream();
 }
 
 

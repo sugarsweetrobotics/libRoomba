@@ -5,7 +5,7 @@
 
 using namespace ssr;
 
-Transport::Transport(const char* portName, const uint16_t baudrate) {
+Transport::Transport(const char* portName, const uint32_t baudrate) {
   m_pSerialPort = new SerialPort(portName, baudrate);
   m_pBuffer = new uint8_t[256];
 }
@@ -28,7 +28,7 @@ void Transport::ReceiveData(uint8_t *pData, const uint32_t requestSize, const ui
   while ((uint32_t)m_pSerialPort->GetSizeInRxBuffer() < requestSize) {
     Thread::Sleep(10);
     m_Timer.tack(&current);
-    if (current.sec * 1000*1000 + current.usec> timeout) {
+    if (current.sec * 1000*1000 + current.usec > timeout) {
       throw TimeoutException();
     }
   }

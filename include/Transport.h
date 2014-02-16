@@ -24,7 +24,7 @@ namespace ssr {
 	Mutex m_SenderMutex;
 
   public:
-    Transport(const char* portName, const uint16_t baudrate);
+    Transport(const char* portName, const uint32_t baudrate);
     
     ~Transport(void);
 	
@@ -33,7 +33,11 @@ namespace ssr {
     void SendPacket(const uint8_t opCode, const uint8_t* pData=NULL, const uint32_t Size=0) {
 		MutexBinder binder(m_SenderMutex);
       m_pSerialPort->Write(&opCode, 1);
-      m_pSerialPort->Write(pData, Size);
+	  Thread::Sleep(30);
+	  for(uint32_t i = 0;i < Size;i++) {
+		  m_pSerialPort->Write(pData+i, 1);
+		  Thread::Sleep(30);
+	  }
     }
     
     Packet ReceivePacket(const uint32_t requestSize, const uint32_t timeout = ROOMBA_INFINITE);

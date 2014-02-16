@@ -22,9 +22,9 @@ int main(const int argc, const char* argv[]) {
     pRoomba->safeControl();
     //pRoomba->runAsync();
     int c;
-    std::cin >> c;
+    //std::cin >> c;
     pRoomba->clean();
-    std::cin >> c;
+    //std::cin >> c;
     delete pRoomba;
   } catch (std::exception &e) {
     std::cout << "Excepiton:" << e.what() << std::endl;
